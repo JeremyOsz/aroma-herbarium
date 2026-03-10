@@ -2,6 +2,12 @@
 
 Vintage-inspired aromatherapy explorer built with Next.js, Tailwind, and shadcn.
 
+## Reusable app structure
+
+Subject-agnostic blueprint for this app pattern (cards + list + filters + modal + multiple exploration modes):
+
+- [Explorer App Pattern](./docs/explorer-app-pattern.md)
+
 ## Run locally
 
 ```bash

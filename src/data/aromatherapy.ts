@@ -149,7 +149,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Day resets", "Post-cooking air", "Cleaning water"],
     use: ["3-5 drops solo in diffuser", "Base top note in blends"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/OrangeBloss_wb.jpg/330px-OrangeBloss_wb.jpg",
+      "/images/ingredients/orange.jpg",
     imageSource: "Wikimedia Commons (Citrus × sinensis)",
     imageObjectPosition: "center 38%",
   },
@@ -180,8 +180,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Slump reset", "Tea salon mood", "Elegant layering"],
     use: ["1-2 drops to brighten wood/resin blends"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Bergamot_orange_-_whole_and_slice.jpg/330px-Bergamot_orange_-_whole_and_slice.jpg",
-    imageSource: "Wikimedia Commons (Citrus bergamia)",
+      "/images/ingredients/bergamot.jpg",
+    imageSource: "Wikimedia Commons (Citrus bergamia; Köhler botanical plate)",
   },
   {
     id: "lemon-grapefruit",
@@ -209,8 +209,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Kitchen", "Bathroom", "Quick freshening"],
     use: ["Short diffuser bursts", "Pair with rosemary/eucalyptus"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/P1030323.JPG/330px-P1030323.JPG",
-    imageSource: "Wikimedia Commons (Citrus limon)",
+      "/images/ingredients/lemon-grapefruit.jpg",
+    imageSource: "Wikimedia Commons (Citrus limon; Köhler botanical plate)",
     imageObjectPosition: "center 33%",
   },
   {
@@ -240,7 +240,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Evening grounding", "Balancing sweet blends"],
     use: ["1-3 drops with orange/neroli/amber"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Cedrus_atlantica.jpg/330px-Cedrus_atlantica.jpg",
+      "/images/ingredients/cedarwood.jpg",
     imageSource: "Wikimedia Commons (Cedrus atlantica)",
   },
   {
@@ -270,7 +270,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Evening depth", "Anchor note"],
     use: ["1 drop at a time; dominates quickly"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Pogostemon_cablin_001.jpg/330px-Pogostemon_cablin_001.jpg",
+      "/images/ingredients/patchouli.jpg",
     imageSource: "Wikimedia Commons (Pogostemon cablin)",
   },
   {
@@ -300,8 +300,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Post-cleaning reset", "Journaling"],
     use: ["1-2 drops with citrus/woods", "Resin on charcoal with airflow"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Boswellia_sacra.jpg/330px-Boswellia_sacra.jpg",
-    imageSource: "Wikimedia Commons (Boswellia sacra)",
+      "/images/ingredients/frankincense.jpg",
+    imageSource: "Wikimedia Commons (Boswellia sacra; Köhler botanical plate)",
   },
   {
     id: "benzoin",
@@ -328,7 +328,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Comforting evenings", "Softening sharper herbs"],
     use: ["1-2 drops with orange, cedar, tea"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Styrax_benzoin_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-133.jpg/330px-Styrax_benzoin_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-133.jpg",
+      "/images/ingredients/benzoin.jpg",
     imageSource: "Wikimedia Commons (Styrax benzoin)",
   },
   {
@@ -358,8 +358,8 @@ export const ingredients: Ingredient[] = [
     use: ["1 drop in mostly-essential-oil blend"],
     caution: "Fragrance versions are room-only, not skin use.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Cistus_April_2017-2.jpg/330px-Cistus_April_2017-2.jpg",
-    imageSource: "Wikimedia Commons (Cistus ladanifer; amber-accord botanical reference)",
+      "/images/ingredients/amber.jpg",
+    imageSource: "Wikimedia Commons (Frankincense resin tears; amber-accord resin reference)",
   },
   {
     id: "neroli",
@@ -387,7 +387,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Bedroom", "Romantic evenings"],
     use: ["1 drop in burner or linen spray"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Citrus_aurantium.jpg/330px-Citrus_aurantium.jpg",
+      "/images/ingredients/neroli.jpg",
     imageSource: "Wikimedia Commons (Citrus × aurantium blossom / neroli source)",
   },
   {
@@ -416,7 +416,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Balancing resinous blends", "Mood uplift"],
     use: ["1-2 drops with citrus, amber, patchouli"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/%28MHNT%29_Pelargonium_graveolens_flower_and_leaves.jpg/330px-%28MHNT%29_Pelargonium_graveolens_flower_and_leaves.jpg",
+      "/images/ingredients/geranium.jpg",
     imageSource: "Wikimedia Commons (Pelargonium graveolens)",
     imageObjectPosition: "center 40%",
   },
@@ -446,7 +446,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Bath rituals", "Sensual blends"],
     use: ["Use 1 drop only; cut with citrus"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Cananga_odorata_01.JPG/330px-Cananga_odorata_01.JPG",
+      "/images/ingredients/ylang.jpg",
     imageSource: "Wikimedia Commons (Cananga odorata)",
   },
   {
@@ -476,8 +476,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Bedtime", "Linen sprays"],
     use: ["Few drops in bedroom spray or bath"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Lavandula_angustifolia_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-087.jpg/330px-Lavandula_angustifolia_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-087.jpg",
-    imageSource: "Wikimedia Commons (Lavandula angustifolia)",
+      "/images/ingredients/lavender.jpg",
+    imageSource: "Wikimedia Commons (Lavandula angustifolia; Köhler botanical plate)",
     imageObjectPosition: "center 34%",
   },
   {
@@ -507,7 +507,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["De-stress", "Evening calm"],
     use: ["1-2 drops with orange or lavender"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Salvia_sclarea3.jpg/330px-Salvia_sclarea3.jpg",
+      "/images/ingredients/clary-sage.jpg",
     imageSource: "Wikimedia Commons (Salvia sclarea)",
   },
   {
@@ -537,8 +537,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Focus", "Kitchen cleaning"],
     use: ["1-2 drops with lemon/orange"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Rosemary_in_bloom.JPG/330px-Rosemary_in_bloom.JPG",
-    imageSource: "Wikimedia Commons (Salvia rosmarinus)",
+      "/images/ingredients/rosemary.jpg",
+    imageSource: "Wikimedia Commons (Salvia rosmarinus / Rosmarinus officinalis; Köhler botanical plate)",
     imageObjectPosition: "center 35%",
   },
   {
@@ -567,8 +567,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Shower steam", "Winter room refresh"],
     use: ["1-2 drops in shower tray/diffuser"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Eucalyptus_globulus_subsp._maidenii.jpg/330px-Eucalyptus_globulus_subsp._maidenii.jpg",
-    imageSource: "Wikimedia Commons (Eucalyptus globulus)",
+      "/images/ingredients/eucalyptus.jpg",
+    imageSource: "Wikimedia Commons (Eucalyptus globulus; Köhler botanical plate)",
   },
   {
     id: "rose",
@@ -597,7 +597,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Evening elegance", "Softening smoky blends"],
     use: ["1 drop with woods/resins; avoid overdosing"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/%D9%85%D8%B1%D8%A7%D8%B3%D9%85_%DA%AF%D9%84%D8%A7%D8%A8%DA%AF%DB%8C%D8%B1%DB%8C_%D8%AF%D8%B1_%D9%82%D9%85%D8%B5%D8%B1_%DA%A9%D8%A7%D8%B4%D8%A7%D9%86_Golabgiri_%28%22making_Rosewater%22%29_-_Ghamsar-_Kashan-_Iran_19.jpg/330px-%D9%85%D8%B1%D8%A7%D8%B3%D9%85_%DA%AF%D9%84%D8%A7%D8%A8%DA%AF%DB%8C%D8%B1%DB%8C_%D8%AF%D8%B1_%D9%82%D9%85%D8%B5%D8%B1_%DA%A9%D8%A7%D8%B4%D8%A7%D9%86_Golabgiri_%28%22making_Rosewater%22%29_-_Ghamsar-_Kashan-_Iran_19.jpg",
+      "/images/ingredients/rose.jpg",
     imageSource: "Wikimedia Commons (Rosa × damascena)",
     imageObjectPosition: "center 34%",
   },
@@ -628,7 +628,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Night blends", "Floral-luxury moods"],
     use: ["1 drop with sandalwood, rose, or citrus tops"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Jasminum_grandiflorum_%28Oleaceae%29.jpg/330px-Jasminum_grandiflorum_%28Oleaceae%29.jpg",
+      "/images/ingredients/jasmine.jpg",
     imageSource: "Wikimedia Commons (Jasminum grandiflorum)",
   },
   {
@@ -658,8 +658,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Meditation rooms", "Fixing volatile florals"],
     use: ["1-2 drops as base with floral hearts"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Santalum_album_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-128.jpg/330px-Santalum_album_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-128.jpg",
-    imageSource: "Wikimedia Commons (Santalum album)",
+      "/images/ingredients/sandalwood.jpg",
+    imageSource: "Wikimedia Commons (Santalum album; Köhler botanical plate)",
   },
   {
     id: "vetiver",
@@ -688,7 +688,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Summer grounding", "Balancing florals"],
     use: ["1 drop with citrus/rose/jasmine structures"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Vetiver_grass.jpg/330px-Vetiver_grass.jpg",
+      "/images/ingredients/vetiver.jpg",
     imageSource: "Wikimedia Commons (Chrysopogon zizanioides)",
     imageObjectPosition: "center 40%",
   },
@@ -719,7 +719,7 @@ export const ingredients: Ingredient[] = [
     use: ["1 drop with rose/amber/sandalwood"],
     caution: "Often a fragrance accord; room use only unless skin-safe specs are confirmed.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Aquilaria_malaccensis_-_Agar_Wood%2C_Eaglewood_-_Indian_Aloewood_at_Munnar_%282%29.jpg/330px-Aquilaria_malaccensis_-_Agar_Wood%2C_Eaglewood_-_Indian_Aloewood_at_Munnar_%282%29.jpg",
+      "/images/ingredients/oud-accord.jpg",
     imageSource: "Wikimedia Commons (Aquilaria malaccensis; oud source species)",
   },
   {
@@ -749,7 +749,7 @@ export const ingredients: Ingredient[] = [
     use: ["Trace to 1 drop with bergamot/rose/vetiver"],
     caution: "Usually an accord; check IFRA-compliant versions for skin use.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Lichen_foliac%C3%A92..JPG/330px-Lichen_foliac%C3%A92..JPG",
+      "/images/ingredients/oakmoss-accord.jpg",
     imageSource: "Wikimedia Commons (Evernia prunastri; oakmoss lichen)",
   },
   {
@@ -779,7 +779,7 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Focus rooms", "Minimalist blends"],
     use: ["1-2 drops with bergamot or tea accords"],
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/%E5%A4%A7%E6%99%BA%E5%AF%BA_%28%E5%B2%90%E9%98%9C%E5%B8%82%29-%E6%A8%B9%E9%BD%A2%E7%B4%84700%E5%B9%B4%E3%81%AE%E5%A4%A7%E3%83%92%E3%83%8E%E3%82%ADdaichiji008.jpg/330px-%E5%A4%A7%E6%99%BA%E5%AF%BA_%28%E5%B2%90%E9%98%9C%E5%B8%82%29-%E6%A8%B9%E9%BD%A2%E7%B4%84700%E5%B9%B4%E3%81%AE%E5%A4%A7%E3%83%92%E3%83%8E%E3%82%ADdaichiji008.jpg",
+      "/images/ingredients/hinoki.jpg",
     imageSource: "Wikimedia Commons (Chamaecyparis obtusa)",
   },
   {
@@ -810,8 +810,369 @@ export const ingredients: Ingredient[] = [
     use: ["1 drop with citrus/woods or as wood stick fumigation"],
     caution: "Use only responsibly sourced material and ventilate smoke-based use.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bursera_graveolens.jpg/330px-Bursera_graveolens.jpg",
+      "/images/ingredients/palo-santo.jpg",
     imageSource: "Wikimedia Commons (Bursera graveolens)",
+  },
+  {
+    id: "musk-accord",
+    name: "Musk Accord",
+    category: "woods",
+    regions: ["Levant", "Maghreb", "Global"],
+    scentProfile: ["skin-like", "soft", "lasting"],
+    accords: ["Clean Musk", "Skin Scent"],
+    symbolism: ["Intimacy", "Presence"],
+    vibe: "Soft diffusion that extends florals and woods.",
+    about:
+      "Modern musk accords add a clean, skin-like aura and improve persistence without adding obvious heaviness.",
+    history:
+      "Contemporary perfumery shifted from animal-derived musks to synthetic musk molecules that are safer and more consistent.",
+    prizedOrigin: "Fine musk profiles are usually composition-dependent rather than place-dependent.",
+    preparation: [
+      "Built as a perfumery accord from macrocyclic or polycyclic musk materials.",
+      "Maceration is often used so musk facets integrate with woods and amber notes.",
+    ],
+    facts: [
+      "Most commercial musk notes are synthetic accords, not botanical distillations.",
+      "Musks are often dosed low but strongly affect longevity.",
+      "Musk can make bright top notes feel smoother and less sharp.",
+    ],
+    goodFor: ["Fixing volatile blends", "Soft evening projection"],
+    use: ["Trace to 1 drop in room-accord blends"],
+    caution: "Usually a fragrance accord; use room-safe materials only.",
+    imageUrl:
+      "/images/ingredients/amber.jpg",
+    imageSource: "Wikimedia Commons (resin reference image used for accord card)",
+  },
+  {
+    id: "saffron",
+    name: "Saffron",
+    latin: "Crocus sativus",
+    category: "herbs",
+    regions: ["Levant", "Maghreb", "Global"],
+    scentProfile: ["spicy", "leathery", "golden"],
+    accords: ["Saffron Rose", "Oud Saffron"],
+    symbolism: ["Luxury", "Warmth"],
+    vibe: "Golden spice lift for rose and oud structures.",
+    about:
+      "Saffron-style notes bring dry spice and subtle leather warmth, often used to brighten dark resin blends.",
+    history:
+      "Saffron traveled major trade routes through Persia, the Levant, and the Mediterranean, shaping culinary and aromatic traditions.",
+    prizedOrigin: "Iranian, Kashmiri, and Spanish saffron styles are common perfumery references.",
+    preparation: [
+      "Natural saffron can be infused or extracted, though many room profiles are built as accords.",
+      "Perfumery blends often combine saffron facets with rose and woods.",
+    ],
+    facts: [
+      "Saffron notes are powerful and easy to overdose.",
+      "It pairs especially well with oud accords and damask rose.",
+      "Even tiny amounts can add perceived richness.",
+    ],
+    goodFor: ["Evening warmth", "Oriental-style blends"],
+    use: ["Trace amount with rose, oud, amber"],
+    caution: "Often an accord; check skin-safety specifications.",
+    imageUrl:
+      "/images/ingredients/rose.jpg",
+    imageSource: "Wikimedia Commons (Rosa × damascena; illustrative card image)",
+  },
+  {
+    id: "kewra",
+    name: "Kewra",
+    latin: "Pandanus odorifer",
+    category: "florals",
+    regions: ["Global", "Levant"],
+    scentProfile: ["green floral", "dewy", "sweet-herbal"],
+    accords: ["Attar Floral", "Green Blossom"],
+    symbolism: ["Festivity", "Care"],
+    vibe: "Bright floral-green note used in attar-style profiles.",
+    about:
+      "Kewra contributes a floral-green brightness that can lift heavier woods and rose structures.",
+    history:
+      "Kewra water and attar are longstanding aromatic materials in South Asian scent and culinary traditions.",
+    prizedOrigin: "Odisha (India) is a major traditional source region.",
+    preparation: [
+      "Traditionally hydro-distilled from pandanus male flowers.",
+      "Used as aromatic water, attar component, or floral modifier accord.",
+    ],
+    facts: [
+      "Kewra reads fresher and greener than many white florals.",
+      "It is often layered with sandalwood in attar traditions.",
+      "Small doses can brighten dense compositions.",
+    ],
+    goodFor: ["Attar-inspired blends", "Refreshing floral lift"],
+    use: ["1 drop with rose/sandalwood/vetiver"],
+    imageUrl:
+      "/images/ingredients/jasmine.jpg",
+    imageSource: "Wikimedia Commons (Jasminum reference image used for floral card)",
+  },
+  {
+    id: "iris-accord",
+    name: "Iris Accord",
+    latin: "Iris pallida / Iris germanica",
+    category: "florals",
+    regions: ["Mediterranean", "Global"],
+    scentProfile: ["powdery", "cool", "elegant"],
+    accords: ["Powder Floral", "Orris Veil"],
+    symbolism: ["Elegance", "Refinement"],
+    vibe: "Cool powdery floral polish in classic French structures.",
+    about:
+      "Iris/orris notes add a soft powdery veil that makes citrus and florals feel more formal and composed.",
+    history:
+      "Orris root became a luxury perfumery material in European fine fragrance traditions, especially in floral and chypre styles.",
+    prizedOrigin: "Italian and French orris traditions are benchmark references.",
+    preparation: [
+      "True orris is aged rhizome material, often years before extraction.",
+      "Many modern uses rely on accorded iris effects due to cost.",
+    ],
+    facts: [
+      "Real orris is one of perfumery's costliest materials.",
+      "Iris notes are often subtle and textural, not loudly floral.",
+      "It pairs well with aldehydes and rose.",
+    ],
+    goodFor: ["Powdery elegance", "French-style floral structures"],
+    use: ["Trace to 1 drop with rose, bergamot, oakmoss"],
+    caution: "Often an accord; verify usage concentration.",
+    imageUrl:
+      "/images/ingredients/geranium.jpg",
+    imageSource: "Wikimedia Commons (Pelargonium reference image used for floral card)",
+  },
+  {
+    id: "aldehydic-accord",
+    name: "Aldehydic Accord",
+    category: "citrus",
+    regions: ["Global", "Mediterranean"],
+    scentProfile: ["sparkling", "soapy", "lifted"],
+    accords: ["Aldehydic Floral", "Clean Linen"],
+    vibe: "Effervescent top-note lift with vintage polish.",
+    about:
+      "Aldehydic accords add a bright, diffusive sparkle that amplifies top notes and makes florals feel airy.",
+    history:
+      "Aldehydes became iconic in early 20th-century French perfumery and shaped the style of many classic luxury florals.",
+    prizedOrigin: "Aldehydic effects are synthetic and formulation-driven rather than region-specific.",
+    preparation: [
+      "Built from selected aldehydes blended with citrus/floral supports.",
+      "Usually pre-diluted for controlled dosing in blends.",
+    ],
+    facts: [
+      "Aldehydes can smell waxy, citrusy, or metallic depending on chain length.",
+      "Very small amounts produce strong lift.",
+      "They are a key part of many 'clean linen' impressions.",
+    ],
+    goodFor: ["Top-note sparkle", "Classic French lift"],
+    use: ["Trace amount with bergamot, iris, rose"],
+    caution: "Synthetic accord; use room-safe dilution levels.",
+    imageUrl:
+      "/images/ingredients/lemon-grapefruit.jpg",
+    imageSource: "Wikimedia Commons (citrus reference image used for accord card)",
+  },
+  {
+    id: "plum-accord",
+    name: "Plum Accord",
+    category: "florals",
+    regions: ["Global", "Mediterranean"],
+    scentProfile: ["fruity", "jammy", "velvet"],
+    accords: ["Plum Chypre", "Velvet Fruit"],
+    vibe: "Velvety fruit tone for floral-wood blends.",
+    about:
+      "Plum accords add fruity depth and a velvet texture that rounds sharp woods and moss notes.",
+    history:
+      "Stone-fruit accords became popular in modern fine fragrance as bridges between florals and amber-wood bases.",
+    prizedOrigin: "Plum effects are usually accord-based and not tied to one origin.",
+    preparation: [
+      "Composed with fruity lactonic and floral materials.",
+      "Often paired with tea, woods, or moss accords for depth.",
+    ],
+    facts: [
+      "Plum notes can feel elegant at low dose and syrupy at high dose.",
+      "Works well with rose, jasmine, and oakmoss.",
+      "Adds perceived richness to minimalist formulas.",
+    ],
+    goodFor: ["Evening fruit-floral mood", "Softening dry woods"],
+    use: ["Trace to 1 drop with floral or mossy bases"],
+    caution: "Usually an accord; check material specs.",
+    imageUrl:
+      "/images/ingredients/rose.jpg",
+    imageSource: "Wikimedia Commons (Rosa reference image used for accord card)",
+  },
+  {
+    id: "green-tea-accord",
+    name: "Green Tea Accord",
+    latin: "Camellia sinensis",
+    category: "herbs",
+    regions: ["Global", "Mediterranean"],
+    scentProfile: ["fresh tea", "green", "transparent"],
+    accords: ["Tea Leaf", "Zen Tea"],
+    vibe: "Clean green tea air with quiet freshness.",
+    about:
+      "Green tea accords provide transparent, leafy freshness without heavy citrus or menthol sharpness.",
+    history:
+      "Tea aroma profiles expanded from beverage culture into modern perfumery as symbols of calm, clarity, and understated luxury.",
+    prizedOrigin: "Japanese and Chinese tea profiles often inspire premium green tea accords.",
+    preparation: [
+      "Usually built as accords from tea-like aromatics and gentle green facets.",
+      "Can be blended with hinoki or citrus for airy minimalist styles.",
+    ],
+    facts: [
+      "Most tea notes in fragrance are accords, not true distilled oils.",
+      "Green tea pairs naturally with cypress and soft citrus.",
+      "It can refresh dense amber or resin structures.",
+    ],
+    goodFor: ["Focus blends", "Daytime minimalist profiles"],
+    use: ["1 drop with hinoki, bergamot, neroli"],
+    caution: "Fragrance accord use only unless material is specified skin-safe.",
+    imageUrl:
+      "/images/ingredients/black-tea.jpg",
+    imageSource: "Wikimedia Commons (Camellia sinensis; tea reference image)",
+  },
+  {
+    id: "myrtle",
+    name: "Myrtle",
+    latin: "Myrtus communis",
+    category: "herbs",
+    regions: ["Mediterranean", "Global"],
+    scentProfile: ["aromatic green", "camphor-soft", "clean"],
+    accords: ["Mediterranean Green", "Aromatic Water"],
+    symbolism: ["Vitality", "Purity"],
+    vibe: "Clean aromatic herb with soft coastal greenness.",
+    about:
+      "Myrtle sits between rosemary and eucalyptus, giving Mediterranean blends a cleaner herbal center.",
+    history:
+      "Myrtle appears in Mediterranean aromatic waters and traditional rituals as a symbolically and practically valued plant.",
+    prizedOrigin: "Corsican and Sardinian myrtle traditions are often referenced.",
+    preparation: [
+      "Leaves and twigs are steam-distilled into essential oil.",
+      "Used in aromatic waters and herb-forward cologne styles.",
+    ],
+    facts: [
+      "Myrtle is softer than eucalyptus and often less piercing than rosemary.",
+      "Pairs well with citrus peels in Mediterranean profiles.",
+      "Useful when you want freshness without menthol dominance.",
+    ],
+    goodFor: ["Coastal-fresh blends", "Daytime aromatics"],
+    use: ["1-2 drops with bergamot, lemon, neroli"],
+    imageUrl:
+      "/images/ingredients/rosemary.jpg",
+    imageSource: "Wikimedia Commons (rosemary reference image used for herbal card)",
+  },
+  {
+    id: "copal",
+    name: "Copal",
+    category: "woods",
+    regions: ["Global", "Levant"],
+    scentProfile: ["bright resin", "piney", "ceremonial"],
+    accords: ["Ceremonial Resin", "Bright Incense"],
+    symbolism: ["Cleansing", "Offering"],
+    vibe: "Luminous ritual resin smoke for cleansing moods.",
+    about:
+      "Copal offers a brighter resin effect than heavy incense notes, adding ceremonial atmosphere with lift.",
+    history:
+      "Mesoamerican traditions used copal resins in offerings and ritual fumigation, and the material remains central in spiritual practice.",
+    prizedOrigin: "Mexico and Central America are key traditional copal sources.",
+    preparation: [
+      "Usually used as raw resin on charcoal or as tincture/extract.",
+      "Some room blends recreate copal with resin accords.",
+    ],
+    facts: [
+      "Copal is a family of related resins, not one single standardized material.",
+      "Its smoke profile is often perceived as cleaner than darker incense resins.",
+      "Pairs well with citrus and palo santo.",
+    ],
+    goodFor: ["Ritual resets", "Protective cleansing ambiance"],
+    use: ["Burn resin with ventilation or add trace accord"],
+    caution: "Ventilate when using smoke; use responsible sourcing.",
+    imageUrl:
+      "/images/ingredients/frankincense.jpg",
+    imageSource: "Wikimedia Commons (Boswellia resin reference image used for copal card)",
+  },
+  {
+    id: "cacao-accord",
+    name: "Cacao Accord",
+    latin: "Theobroma cacao",
+    category: "herbs",
+    regions: ["Global", "Maghreb"],
+    scentProfile: ["dark cocoa", "powdery", "warm"],
+    accords: ["Cocoa Amber", "Gourmand Resin"],
+    vibe: "Dry cocoa warmth that deepens amber bases.",
+    about:
+      "Cacao accords add dark gourmand warmth without turning blends fully dessert-like when dosed carefully.",
+    history:
+      "Cacao's aromatic profile moved from food traditions into modern perfumery as part of gourmand and amber styles.",
+    prizedOrigin: "Latin American and West African cacao profiles inspire many fragrance interpretations.",
+    preparation: [
+      "Usually built as an accord with cocoa, woody, and vanilla-like facets.",
+      "Can be paired with tobacco or resins for darker compositions.",
+    ],
+    facts: [
+      "Cacao notes are often drier and less sweet than vanilla notes.",
+      "Small amounts can make woods feel richer.",
+      "Overuse can flatten fresh top notes.",
+    ],
+    goodFor: ["Evening warmth", "Gourmand-wood depth"],
+    use: ["Trace to 1 drop with vanilla, amber, tobacco"],
+    caution: "Generally an accord; check intended application use.",
+    imageUrl:
+      "/images/ingredients/benzoin.jpg",
+    imageSource: "Wikimedia Commons (resin reference image used for cacao accord card)",
+  },
+  {
+    id: "vanilla-accord",
+    name: "Vanilla Accord",
+    latin: "Vanilla planifolia",
+    category: "woods",
+    regions: ["Global", "Maghreb"],
+    scentProfile: ["warm sweet", "creamy", "comforting"],
+    accords: ["Vanilla Amber", "Soft Gourmand"],
+    symbolism: ["Comfort", "Tenderness"],
+    vibe: "Comforting sweetness that rounds dry woods.",
+    about:
+      "Vanilla accords add creamy sweetness and make smoky or mossy structures feel friendlier and more wearable.",
+    history:
+      "Vanilla spread globally through colonial botanical exchange and later became foundational in gourmand perfumery.",
+    prizedOrigin: "Madagascar and Mexican vanilla profiles are commonly used references.",
+    preparation: [
+      "True vanilla absolute is extracted from cured pods.",
+      "Many fragrance uses rely on vanillin-rich accords for consistency.",
+    ],
+    facts: [
+      "Vanilla tones can be natural absolute, synthetic vanillin, or blended accords.",
+      "It is a common bridge between florals and woods.",
+      "Low doses can add comfort without becoming sugary.",
+    ],
+    goodFor: ["Cozy room blends", "Smoothing resin edges"],
+    use: ["Trace to 1 drop with sandalwood, benzoin, cacao"],
+    caution: "Often an accord; verify concentration for intended use.",
+    imageUrl:
+      "/images/ingredients/amber.jpg",
+    imageSource: "Wikimedia Commons (resin reference image used for vanilla accord card)",
+  },
+  {
+    id: "tobacco-leaf-accord",
+    name: "Tobacco Leaf Accord",
+    latin: "Nicotiana tabacum",
+    category: "woods",
+    regions: ["Global", "Levant"],
+    scentProfile: ["dry leaf", "honeyed", "smoky"],
+    accords: ["Tobacco Amber", "Dry Leaf"],
+    vibe: "Dry, warm leaf tone for deep evening blends.",
+    about:
+      "Tobacco leaf accords contribute dry sweetness and subtle smoke, useful for adding depth to vanilla, woods, and resin bases.",
+    history:
+      "Tobacco aroma became an enduring perfumery theme through trade-era leaf culture and later amber-tobacco fine fragrances.",
+    prizedOrigin: "Cuban, Turkish, and Virginia leaf styles often inspire accord profiles.",
+    preparation: [
+      "Usually composed as an accord with leaf, hay, honey, and smoky facets.",
+      "Sometimes paired with vanilla or cacao notes for richer depth.",
+    ],
+    facts: [
+      "Fragrance tobacco notes do not require smoke to convey a tobacco effect.",
+      "Works especially well with vanilla, saffron, and resins.",
+      "Too much can overshadow delicate florals.",
+    ],
+    goodFor: ["Evening depth", "Warm lounge atmospheres"],
+    use: ["Trace to 1 drop with vanilla, amber, woods"],
+    caution: "Room fragrance accord only unless skin-safe blend is confirmed.",
+    imageUrl:
+      "/images/ingredients/black-tea.jpg",
+    imageSource: "Wikimedia Commons (tea reference image used for tobacco accord card)",
   },
   {
     id: "black-tea",
@@ -839,8 +1200,8 @@ export const ingredients: Ingredient[] = [
     use: ["1 drop with orange, bergamot, amber"],
     caution: "Usually a fragrance accord; use as room scent only.",
     imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Csinensis.jpg/330px-Csinensis.jpg",
-    imageSource: "Wikimedia Commons (Camellia sinensis; black-tea source plant)",
+      "/images/ingredients/black-tea.jpg",
+    imageSource: "Wikimedia Commons (Camellia sinensis; Köhler botanical plate)",
   },
 ];
 
@@ -884,6 +1245,39 @@ export const blendRecipes: BlendRecipe[] = [
       base: "Benzoin or Lavender",
     },
     formula: ["Orange x3", "Clary Sage x2", "Benzoin x1", "Lavender x1 optional"],
+  },
+  {
+    name: "Library Tea Woods",
+    family: "warm",
+    vibe: "Dry tea, polished wood, and quiet amber depth.",
+    layers: {
+      top: "Bergamot",
+      heart: "Black Tea Accord",
+      base: "Hinoki + Amber",
+    },
+    formula: ["Bergamot x3", "Black Tea Accord x2", "Hinoki x1", "Amber x1"],
+  },
+  {
+    name: "Sunlit Citrus Focus",
+    family: "fresh",
+    vibe: "Bright and clean with a crisp herbal spine.",
+    layers: {
+      top: "Lemon + Bergamot",
+      heart: "Rosemary",
+      base: "Cedarwood",
+    },
+    formula: ["Lemon x2", "Bergamot x2", "Rosemary x1", "Cedarwood x1"],
+  },
+  {
+    name: "Velvet Floral Night",
+    family: "dreamy",
+    vibe: "Soft petals over creamy woods for evening wind-down.",
+    layers: {
+      top: "Neroli",
+      heart: "Rose + Jasmine",
+      base: "Sandalwood + Benzoin",
+    },
+    formula: ["Neroli x1", "Rose x1", "Jasmine x1", "Sandalwood x1", "Benzoin x1"],
   },
 ];
 

@@ -102,15 +102,36 @@ function normalizeScentToken(value: string) {
     .trim();
 }
 
-function getAtlasMatchesForMaterials(materials: string[]) {
-  const normalizedMaterials = materials.map(normalizeScentToken).filter(Boolean);
+const materialAliases: Record<string, string> = {
+  "orange blossom": "neroli",
+  aloeswood: "oud accord",
+  "vetiver khus": "vetiver",
+};
 
-  return ingredients
-    .filter((item) => {
-      const name = normalizeScentToken(item.name);
-      return normalizedMaterials.some((material) => name.includes(material) || material.includes(name));
-    })
-    .map((item) => item.name);
+function findAtlasIngredientForMaterial(material: string) {
+  const normalizedMaterial = normalizeScentToken(material);
+  const alias = materialAliases[normalizedMaterial];
+  const lookup = alias ? normalizeScentToken(alias) : normalizedMaterial;
+
+  return ingredients.find((item) => {
+    const name = normalizeScentToken(item.name);
+    return name.includes(lookup) || lookup.includes(name);
+  });
+}
+
+function getAtlasCoverageForMaterials(materials: string[]) {
+  return materials.reduce<{ available: string[]; missing: string[] }>((acc, material) => {
+    const match = findAtlasIngredientForMaterial(material);
+    if (match) {
+      if (!acc.available.includes(match.name)) {
+        acc.available.push(match.name);
+      }
+      return acc;
+    }
+
+    acc.missing.push(material);
+    return acc;
+  }, { available: [], missing: [] });
 }
 
 export function HerbariumExplorer() {
@@ -203,9 +224,9 @@ export function HerbariumExplorer() {
     });
   }, [activeCategory, activeRegion, query]);
 
-  const laneIngredientMatches = useMemo(() => {
-    return worldScentLanes.reduce<Record<string, string[]>>((acc, lane) => {
-      acc[lane.id] = getAtlasMatchesForMaterials(lane.signatureMaterials);
+  const laneIngredientCoverage = useMemo(() => {
+    return worldScentLanes.reduce<Record<string, { available: string[]; missing: string[] }>>((acc, lane) => {
+      acc[lane.id] = getAtlasCoverageForMaterials(lane.signatureMaterials);
       return acc;
     }, {});
   }, []);
@@ -489,7 +510,7 @@ export function HerbariumExplorer() {
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {worldScentLanes.map((lane, index) => {
                 const accent = laneCardAccents[index % laneCardAccents.length];
-                const matches = laneIngredientMatches[lane.id] ?? [];
+                const coverage = laneIngredientCoverage[lane.id] ?? { available: [], missing: [] };
 
                 return (
                   <Card
@@ -524,17 +545,36 @@ export function HerbariumExplorer() {
                         <p className="mt-1 leading-relaxed">{lane.usage}</p>
                       </div>
 
-                      {matches.length ? (
+                      {coverage.available.length ? (
                         <div className="space-y-2">
                           <p className="text-[0.7rem] uppercase tracking-[0.18em] text-amber-900/65">
                             Available in this atlas
                           </p>
                           <div className="flex flex-wrap gap-1.5">
-                            {matches.map((itemName) => (
+                            {coverage.available.map((itemName) => (
                               <Badge
                                 key={`${lane.id}-match-${itemName}`}
                                 variant="outline"
                                 className="border-amber-900/25 text-amber-900"
+                              >
+                                {itemName}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {coverage.missing.length ? (
+                        <div className="space-y-2">
+                          <p className="text-[0.7rem] uppercase tracking-[0.18em] text-amber-900/65">
+                            Missing from this atlas
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {coverage.missing.map((itemName) => (
+                              <Badge
+                                key={`${lane.id}-missing-${itemName}`}
+                                variant="secondary"
+                                className="bg-amber-900/12 text-amber-900/75"
                               >
                                 {itemName}
                               </Badge>
