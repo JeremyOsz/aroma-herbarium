@@ -1,0 +1,16 @@
+{
+  "name": "Aroma Herbarium",
+  "short_name": "Herbarium",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#E8E2D4",
+  "background_color": "#F4F0E8",
+  "display": "standalone"
+}
+
