@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "archive.org",
         pathname: "/download/**",
       },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        pathname: "/wikipedia/commons/**",
+      },
     ],
   },
 };

@@ -149,9 +149,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Day resets", "Post-cooking air", "Cleaning water"],
     use: ["3-5 drops solo in diffuser", "Base top note in blends"],
     imageUrl:
-      "https://archive.org/download/Capsicum-Piper-indicum-vulgarissimum-PHAIDRA_o_333024/Capsicum-Piper-indicum-vulgarissimum-PHAIDRA_o_333024.jpg",
-    imageSource:
-      "Archive.org Flora Berolinensis (Capsicum plate used as vintage citrus-era botanical proxy)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/OrangeBloss_wb.jpg/330px-OrangeBloss_wb.jpg",
+    imageSource: "Wikimedia Commons (Citrus × sinensis)",
     imageObjectPosition: "center 38%",
   },
   {
@@ -181,8 +180,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Slump reset", "Tea salon mood", "Elegant layering"],
     use: ["1-2 drops to brighten wood/resin blends"],
     imageUrl:
-      "https://archive.org/download/Erica-Erica-vulgaris-glabra-PHAIDRA_o_333031/Erica-Erica-vulgaris-glabra-PHAIDRA_o_333031.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Erica plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Bergamot_orange_-_whole_and_slice.jpg/330px-Bergamot_orange_-_whole_and_slice.jpg",
+    imageSource: "Wikimedia Commons (Citrus bergamia)",
   },
   {
     id: "lemon-grapefruit",
@@ -210,8 +209,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Kitchen", "Bathroom", "Quick freshening"],
     use: ["Short diffuser bursts", "Pair with rosemary/eucalyptus"],
     imageUrl:
-      "https://archive.org/download/Citrus-Limon-PHAIDRA_o_26218/Citrus-Limon-PHAIDRA_o_26218.jpg",
-    imageSource: "Archive.org Piante del Regio Orto di Padova (Citrus limon plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/P1030323.JPG/330px-P1030323.JPG",
+    imageSource: "Wikimedia Commons (Citrus limon)",
     imageObjectPosition: "center 33%",
   },
   {
@@ -241,8 +240,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Evening grounding", "Balancing sweet blends"],
     use: ["1-3 drops with orange/neroli/amber"],
     imageUrl:
-      "https://archive.org/download/Juniperus-Juniperus-vulgaris-officinarum-PHAIDRA_o_332943/Juniperus-Juniperus-vulgaris-officinarum-PHAIDRA_o_332943.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Juniperus plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Cedrus_atlantica.jpg/330px-Cedrus_atlantica.jpg",
+    imageSource: "Wikimedia Commons (Cedrus atlantica)",
   },
   {
     id: "patchouli",
@@ -271,8 +270,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Evening depth", "Anchor note"],
     use: ["1 drop at a time; dominates quickly"],
     imageUrl:
-      "https://archive.org/download/Rubia-Rubia-tinctorum-sativa-PHAIDRA_o_332989/Rubia-Rubia-tinctorum-sativa-PHAIDRA_o_332989.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Rubia plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Pogostemon_cablin_001.jpg/330px-Pogostemon_cablin_001.jpg",
+    imageSource: "Wikimedia Commons (Pogostemon cablin)",
   },
   {
     id: "frankincense",
@@ -301,8 +300,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Post-cleaning reset", "Journaling"],
     use: ["1-2 drops with citrus/woods", "Resin on charcoal with airflow"],
     imageUrl:
-      "https://archive.org/download/Asclepias-Vincetoxicum-PHAIDRA_o_333123/Asclepias-Vincetoxicum-PHAIDRA_o_333123.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Asclepias plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Boswellia_sacra.jpg/330px-Boswellia_sacra.jpg",
+    imageSource: "Wikimedia Commons (Boswellia sacra)",
   },
   {
     id: "benzoin",
@@ -329,8 +328,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Comforting evenings", "Softening sharper herbs"],
     use: ["1-2 drops with orange, cedar, tea"],
     imageUrl:
-      "https://archive.org/download/Daphne-Laureola-semper-virens-PHAIDRA_o_333146/Daphne-Laureola-semper-virens-PHAIDRA_o_333146.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Daphne plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Styrax_benzoin_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-133.jpg/330px-Styrax_benzoin_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-133.jpg",
+    imageSource: "Wikimedia Commons (Styrax benzoin)",
   },
   {
     id: "amber",
@@ -359,8 +358,8 @@ export const ingredients: Ingredient[] = [
     use: ["1 drop in mostly-essential-oil blend"],
     caution: "Fragrance versions are room-only, not skin use.",
     imageUrl:
-      "https://archive.org/download/Solidago-Virga-aurea-angustifolia-panicula-speciosa-PHAIDRA_o_333087/Solidago-Virga-aurea-angustifolia-panicula-speciosa-PHAIDRA_o_333087.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Solidago plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Cistus_April_2017-2.jpg/330px-Cistus_April_2017-2.jpg",
+    imageSource: "Wikimedia Commons (Cistus ladanifer; amber-accord botanical reference)",
   },
   {
     id: "neroli",
@@ -388,8 +387,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Bedroom", "Romantic evenings"],
     use: ["1 drop in burner or linen spray"],
     imageUrl:
-      "https://archive.org/download/Chrysanthemum-Chrysanthemum-foliis-matricariae-PHAIDRA_o_333142/Chrysanthemum-Chrysanthemum-foliis-matricariae-PHAIDRA_o_333142.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Chrysanthemum plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Citrus_aurantium.jpg/330px-Citrus_aurantium.jpg",
+    imageSource: "Wikimedia Commons (Citrus × aurantium blossom / neroli source)",
   },
   {
     id: "geranium",
@@ -417,8 +416,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Balancing resinous blends", "Mood uplift"],
     use: ["1-2 drops with citrus, amber, patchouli"],
     imageUrl:
-      "https://archive.org/download/Pelargonium-citriodorum-PHAIDRA_o_26552/Pelargonium-citriodorum-PHAIDRA_o_26552.jpg",
-    imageSource: "Archive.org Piante del Regio Orto di Padova (Pelargonium citriodorum plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/%28MHNT%29_Pelargonium_graveolens_flower_and_leaves.jpg/330px-%28MHNT%29_Pelargonium_graveolens_flower_and_leaves.jpg",
+    imageSource: "Wikimedia Commons (Pelargonium graveolens)",
     imageObjectPosition: "center 40%",
   },
   {
@@ -447,8 +446,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Bath rituals", "Sensual blends"],
     use: ["Use 1 drop only; cut with citrus"],
     imageUrl:
-      "https://archive.org/download/Hibiscus-Maluauiscus-arborescens-flore-miniato-clauso-PHAIDRA_o_332948/Hibiscus-Maluauiscus-arborescens-flore-miniato-clauso-PHAIDRA_o_332948.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Hibiscus plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Cananga_odorata_01.JPG/330px-Cananga_odorata_01.JPG",
+    imageSource: "Wikimedia Commons (Cananga odorata)",
   },
   {
     id: "lavender",
@@ -477,8 +476,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Bedtime", "Linen sprays"],
     use: ["Few drops in bedroom spray or bath"],
     imageUrl:
-      "https://archive.org/download/Lavandula-Stoecas-PHAIDRA_o_26237/Lavandula-Stoecas-PHAIDRA_o_26237.jpg",
-    imageSource: "Archive.org Piante del Regio Orto di Padova (Lavandula stoecas plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Lavandula_angustifolia_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-087.jpg/330px-Lavandula_angustifolia_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-087.jpg",
+    imageSource: "Wikimedia Commons (Lavandula angustifolia)",
     imageObjectPosition: "center 34%",
   },
   {
@@ -508,8 +507,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["De-stress", "Evening calm"],
     use: ["1-2 drops with orange or lavender"],
     imageUrl:
-      "https://archive.org/download/Salvia-Horminum-silvestre-salvifolium-minus-PHAIDRA_o_333079/Salvia-Horminum-silvestre-salvifolium-minus-PHAIDRA_o_333079.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Salvia plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Salvia_sclarea3.jpg/330px-Salvia_sclarea3.jpg",
+    imageSource: "Wikimedia Commons (Salvia sclarea)",
   },
   {
     id: "rosemary",
@@ -538,8 +537,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Focus", "Kitchen cleaning"],
     use: ["1-2 drops with lemon/orange"],
     imageUrl:
-      "https://archive.org/download/Rosmarinus-officinalis-PHAIDRA_o_26202/Rosmarinus-officinalis-PHAIDRA_o_26202.jpg",
-    imageSource: "Archive.org Piante del Regio Orto di Padova (Rosmarinus officinalis plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Rosemary_in_bloom.JPG/330px-Rosemary_in_bloom.JPG",
+    imageSource: "Wikimedia Commons (Salvia rosmarinus)",
     imageObjectPosition: "center 35%",
   },
   {
@@ -568,8 +567,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Shower steam", "Winter room refresh"],
     use: ["1-2 drops in shower tray/diffuser"],
     imageUrl:
-      "https://archive.org/download/Plantago-Plantago-maritima-foliis-gramincis-PHAIDRA_o_333178/Plantago-Plantago-maritima-foliis-gramincis-PHAIDRA_o_333178.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Plantago plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Eucalyptus_globulus_subsp._maidenii.jpg/330px-Eucalyptus_globulus_subsp._maidenii.jpg",
+    imageSource: "Wikimedia Commons (Eucalyptus globulus)",
   },
   {
     id: "rose",
@@ -598,8 +597,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Evening elegance", "Softening smoky blends"],
     use: ["1 drop with woods/resins; avoid overdosing"],
     imageUrl:
-      "https://archive.org/download/Rosa-gallica-PHAIDRA_o_26358/Rosa-gallica-PHAIDRA_o_26358.jpg",
-    imageSource: "Archive.org Piante del Regio Orto di Padova (Rosa gallica plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/%D9%85%D8%B1%D8%A7%D8%B3%D9%85_%DA%AF%D9%84%D8%A7%D8%A8%DA%AF%DB%8C%D8%B1%DB%8C_%D8%AF%D8%B1_%D9%82%D9%85%D8%B5%D8%B1_%DA%A9%D8%A7%D8%B4%D8%A7%D9%86_Golabgiri_%28%22making_Rosewater%22%29_-_Ghamsar-_Kashan-_Iran_19.jpg/330px-%D9%85%D8%B1%D8%A7%D8%B3%D9%85_%DA%AF%D9%84%D8%A7%D8%A8%DA%AF%DB%8C%D8%B1%DB%8C_%D8%AF%D8%B1_%D9%82%D9%85%D8%B5%D8%B1_%DA%A9%D8%A7%D8%B4%D8%A7%D9%86_Golabgiri_%28%22making_Rosewater%22%29_-_Ghamsar-_Kashan-_Iran_19.jpg",
+    imageSource: "Wikimedia Commons (Rosa × damascena)",
     imageObjectPosition: "center 34%",
   },
   {
@@ -629,8 +628,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Night blends", "Floral-luxury moods"],
     use: ["1 drop with sandalwood, rose, or citrus tops"],
     imageUrl:
-      "https://archive.org/download/Jasminum-officinale-PHAIDRA_o_26337/Jasminum-officinale-PHAIDRA_o_26337.jpg",
-    imageSource: "Archive.org Piante del Regio Orto di Padova (Jasminum officinale plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Jasminum_grandiflorum_%28Oleaceae%29.jpg/330px-Jasminum_grandiflorum_%28Oleaceae%29.jpg",
+    imageSource: "Wikimedia Commons (Jasminum grandiflorum)",
   },
   {
     id: "sandalwood",
@@ -659,8 +658,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Meditation rooms", "Fixing volatile florals"],
     use: ["1-2 drops as base with floral hearts"],
     imageUrl:
-      "https://archive.org/download/Juniperus-Juniperus-vulgaris-officinarum-PHAIDRA_o_332943/Juniperus-Juniperus-vulgaris-officinarum-PHAIDRA_o_332943.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Juniperus plate used as vintage wood proxy)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Santalum_album_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-128.jpg/330px-Santalum_album_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-128.jpg",
+    imageSource: "Wikimedia Commons (Santalum album)",
   },
   {
     id: "vetiver",
@@ -689,8 +688,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Summer grounding", "Balancing florals"],
     use: ["1 drop with citrus/rose/jasmine structures"],
     imageUrl:
-      "https://archive.org/download/Gramen-vetiveria-PHAIDRA_o_26411/Gramen-vetiveria-PHAIDRA_o_26411.jpg",
-    imageSource: "Archive.org Piante del Regio Orto di Padova (vetiver plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Vetiver_grass.jpg/330px-Vetiver_grass.jpg",
+    imageSource: "Wikimedia Commons (Chrysopogon zizanioides)",
     imageObjectPosition: "center 40%",
   },
   {
@@ -720,8 +719,8 @@ export const ingredients: Ingredient[] = [
     use: ["1 drop with rose/amber/sandalwood"],
     caution: "Often a fragrance accord; room use only unless skin-safe specs are confirmed.",
     imageUrl:
-      "https://archive.org/download/Cupressus-semperuirens-PHAIDRA_o_26377/Cupressus-semperuirens-PHAIDRA_o_26377.jpg",
-    imageSource: "Archive.org Piante del Regio Orto di Padova (Cupressus plate used as oud-wood proxy)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Aquilaria_malaccensis_-_Agar_Wood%2C_Eaglewood_-_Indian_Aloewood_at_Munnar_%282%29.jpg/330px-Aquilaria_malaccensis_-_Agar_Wood%2C_Eaglewood_-_Indian_Aloewood_at_Munnar_%282%29.jpg",
+    imageSource: "Wikimedia Commons (Aquilaria malaccensis; oud source species)",
   },
   {
     id: "oakmoss-accord",
@@ -750,8 +749,8 @@ export const ingredients: Ingredient[] = [
     use: ["Trace to 1 drop with bergamot/rose/vetiver"],
     caution: "Usually an accord; check IFRA-compliant versions for skin use.",
     imageUrl:
-      "https://archive.org/download/Asclepias-Vincetoxicum-PHAIDRA_o_333123/Asclepias-Vincetoxicum-PHAIDRA_o_333123.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Asclepias plate used as mossy vintage proxy)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Lichen_foliac%C3%A92..JPG/330px-Lichen_foliac%C3%A92..JPG",
+    imageSource: "Wikimedia Commons (Evernia prunastri; oakmoss lichen)",
   },
   {
     id: "hinoki",
@@ -780,8 +779,8 @@ export const ingredients: Ingredient[] = [
     goodFor: ["Focus rooms", "Minimalist blends"],
     use: ["1-2 drops with bergamot or tea accords"],
     imageUrl:
-      "https://archive.org/download/Cupressus-semperuirens-PHAIDRA_o_26377/Cupressus-semperuirens-PHAIDRA_o_26377.jpg",
-    imageSource: "Archive.org Piante del Regio Orto di Padova (Cupressus plate used as hinoki proxy)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/%E5%A4%A7%E6%99%BA%E5%AF%BA_%28%E5%B2%90%E9%98%9C%E5%B8%82%29-%E6%A8%B9%E9%BD%A2%E7%B4%84700%E5%B9%B4%E3%81%AE%E5%A4%A7%E3%83%92%E3%83%8E%E3%82%ADdaichiji008.jpg/330px-%E5%A4%A7%E6%99%BA%E5%AF%BA_%28%E5%B2%90%E9%98%9C%E5%B8%82%29-%E6%A8%B9%E9%BD%A2%E7%B4%84700%E5%B9%B4%E3%81%AE%E5%A4%A7%E3%83%92%E3%83%8E%E3%82%ADdaichiji008.jpg",
+    imageSource: "Wikimedia Commons (Chamaecyparis obtusa)",
   },
   {
     id: "palo-santo",
@@ -811,8 +810,8 @@ export const ingredients: Ingredient[] = [
     use: ["1 drop with citrus/woods or as wood stick fumigation"],
     caution: "Use only responsibly sourced material and ventilate smoke-based use.",
     imageUrl:
-      "https://archive.org/download/Daphne-Laureola-semper-virens-PHAIDRA_o_333146/Daphne-Laureola-semper-virens-PHAIDRA_o_333146.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Daphne plate used as palo santo proxy)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bursera_graveolens.jpg/330px-Bursera_graveolens.jpg",
+    imageSource: "Wikimedia Commons (Bursera graveolens)",
   },
   {
     id: "black-tea",
@@ -840,8 +839,8 @@ export const ingredients: Ingredient[] = [
     use: ["1 drop with orange, bergamot, amber"],
     caution: "Usually a fragrance accord; use as room scent only.",
     imageUrl:
-      "https://archive.org/download/Poterium-Pimpinella-sanguisorba-minor-laeuis-PHAIDRA_o_333181/Poterium-Pimpinella-sanguisorba-minor-laeuis-PHAIDRA_o_333181.jpg",
-    imageSource: "Archive.org Flora Berolinensis (Poterium plate)",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Csinensis.jpg/330px-Csinensis.jpg",
+    imageSource: "Wikimedia Commons (Camellia sinensis; black-tea source plant)",
   },
 ];
 
