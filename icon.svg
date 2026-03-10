@@ -1,0 +1,20 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Aroma Herbarium Icon</title>
+  <desc id="desc">Stylized botanical leaf over a soft circular badge.</desc>
+  <defs>
+    <linearGradient id="bg" x1="96" y1="64" x2="416" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4F0E8"/>
+      <stop offset="1" stop-color="#E8E2D4"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="188" y1="128" x2="344" y2="384" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B8C51"/>
+      <stop offset="1" stop-color="#2F5D3A"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="256" cy="256" r="208" fill="url(#bg)"/>
+
+  <path d="M256 120C210 150 168 212 168 270C168 333 216 384 280 384C334 384 376 349 388 300C345 312 314 305 287 281C261 257 247 224 256 120Z" fill="url(#leaf)"/>
+  <path d="M215 303C248 281 284 252 318 216" stroke="#D8E7D3" stroke-width="18" stroke-linecap="round"/>
+  <path d="M256 136C252 210 273 266 320 306" stroke="#3B6C45" stroke-width="12" stroke-linecap="round" opacity="0.45"/>
+</svg>
