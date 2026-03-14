@@ -5,9 +5,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -21,21 +18,12 @@ import {
   type Ingredient,
   usageGuide,
 } from "@/data/aromatherapy";
-import { cn } from "@/lib/utils";
 
 const categories = Object.keys(categoryLabels) as AromaCategory[];
 const regions = Object.keys(regionNotes) as AromaRegion[];
 const tabs = ["ingredients", "regions", "layering"] as const;
 type ExplorerTab = (typeof tabs)[number];
 const amazonAffiliateTag = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_TAG?.trim();
-const laneCardAccents = [
-  "from-[#f9ecd4] via-[#f7e4bf] to-[#ecd3a1]",
-  "from-[#f6eedf] via-[#e8d8b7] to-[#ddc395]",
-  "from-[#f3eadf] via-[#e0d5c8] to-[#cfbeab]",
-  "from-[#e8efe4] via-[#d8e5d1] to-[#c4d7b8]",
-  "from-[#f6f0dd] via-[#ebdfb8] to-[#dccb96]",
-  "from-[#efe3d4] via-[#dfcdb4] to-[#ccb090]",
-];
 
 function isExplorerTab(value: string | null): value is ExplorerTab {
   return value !== null && (tabs as readonly string[]).includes(value);
@@ -232,188 +220,167 @@ export function HerbariumExplorer() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <header className="relative isolate overflow-hidden rounded-[2rem] border border-amber-900/20 bg-[radial-gradient(circle_at_5%_4%,rgba(164,112,61,0.28),transparent_35%),radial-gradient(circle_at_84%_16%,rgba(77,109,74,0.3),transparent_38%),linear-gradient(160deg,#f8f1e0_0%,#efe1c6_50%,#e4d0ae_100%)] p-7 shadow-[0_24px_55px_-30px_rgba(47,29,8,0.6)] sm:p-10">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(86,57,25,0.07)_0,rgba(86,57,25,0.07)_1px,transparent_1px,transparent_12px)] opacity-45" />
-        <div className="pointer-events-none absolute -right-24 -top-20 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(102,66,32,0.22),transparent_72%)] blur-2xl" />
-        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end">
-          <div className="space-y-6">
-            <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-amber-900/75">
-              <span className="h-px w-8 bg-amber-900/35" />
-              Aromatherapy Herbarium
-            </p>
-            <h1 className="max-w-4xl text-4xl font-semibold leading-[1.04] tracking-tight text-amber-950 sm:text-5xl lg:text-6xl">
-              Vintage Pressed-Plant Lookup for Scent, Mood, and Layering
-            </h1>
-            <p className="max-w-3xl text-base leading-relaxed text-amber-950/82 sm:text-xl">
-              A field-notebook style explorer inspired by archival botanical plates: filter by scent family,
-              browse regional scent lanes, and build balanced top-heart-base blends.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <Badge className="bg-amber-950 text-amber-100">Archive-first references</Badge>
-              <Badge variant="secondary" className="bg-amber-900/15 text-amber-900">
-                Blend-ready layering notes
-              </Badge>
-              <Badge variant="secondary" className="bg-[#667a52]/20 text-[#344526]">
-                Regional scent lanes
-              </Badge>
-            </div>
-            <p className="text-xs text-amber-900/75">
-              Visual reference collections:{" "}
-              <a
-                className="underline decoration-amber-900/45 underline-offset-2 transition-colors hover:text-amber-950"
-                href="https://archive.org/details/flora-berolinensis"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Flora Berolinensis
-              </a>
-              {" · "}
-              <a
-                className="underline decoration-amber-900/45 underline-offset-2 transition-colors hover:text-amber-950"
-                href="https://archive.org/details/piante-del-regio-orto-di-padova"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Piante del Regio Orto di Padova
-              </a>
-            </p>
-          </div>
-
-          <aside className="relative overflow-hidden rounded-2xl border border-amber-950/15 bg-[#f9f2e3]/80 p-4 shadow-[0_18px_32px_-22px_rgba(56,37,15,0.55)] backdrop-blur-[1px]">
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(255,255,255,0.25),transparent_40%,rgba(84,56,24,0.06))]" />
-            <div className="relative space-y-3">
-              <p className="text-[0.68rem] font-medium uppercase tracking-[0.22em] text-amber-900/75">Field Atlas</p>
-              <div className="grid grid-cols-3 gap-2 text-center text-amber-950">
-                <div className="rounded-xl border border-amber-900/15 bg-amber-50/70 px-2 py-2">
-                  <p className="text-lg font-semibold">{ingredients.length}</p>
-                  <p className="text-[0.65rem] uppercase tracking-[0.12em] text-amber-900/70">Plants</p>
-                </div>
-                <div className="rounded-xl border border-amber-900/15 bg-amber-50/70 px-2 py-2">
-                  <p className="text-lg font-semibold">{categories.length}</p>
-                  <p className="text-[0.65rem] uppercase tracking-[0.12em] text-amber-900/70">Families</p>
-                </div>
-                <div className="rounded-xl border border-amber-900/15 bg-amber-50/70 px-2 py-2">
-                  <p className="text-lg font-semibold">{regions.length}</p>
-                  <p className="text-[0.65rem] uppercase tracking-[0.12em] text-amber-900/70">Regions</p>
-                </div>
-              </div>
-              <div className="rounded-xl border border-amber-900/15 bg-[#efe0c0]/55 p-3 text-xs leading-relaxed text-amber-950/80">
-                <p className="font-medium text-amber-950">Notebook cue</p>
-                <p className="mt-1">
-                  Start with one bright top note, one floral or herbal heart, and one resinous base to keep blends
-                  balanced and long-lasting.
-                </p>
-              </div>
-            </div>
-          </aside>
-        </div>
+    <div className="mx-auto max-w-4xl px-5 py-12 sm:px-8">
+      <header className="border-b border-border pb-10">
+        <p className="text-[0.7rem] uppercase tracking-[0.2em] text-muted-foreground">
+          Aromatherapy Herbarium
+        </p>
+        <h1 className="mt-2 text-3xl font-normal tracking-tight text-foreground sm:text-4xl">
+          Vintage pressed-plant lookup for scent, mood, and layering
+        </h1>
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Filter by scent family, browse regional scent lanes, and build balanced top–heart–base blends. Inspired by archival botanical plates.
+        </p>
+        <p className="mt-6 text-xs text-muted-foreground">
+          References:{" "}
+          <a
+            className="underline underline-offset-2 hover:text-foreground"
+            href="https://archive.org/details/flora-berolinensis"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Flora Berolinensis
+          </a>
+          {" · "}
+          <a
+            className="underline underline-offset-2 hover:text-foreground"
+            href="https://archive.org/details/piante-del-regio-orto-di-padova"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Piante del Regio Orto di Padova
+          </a>
+        </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {ingredients.length} plants · {categories.length} families · {regions.length} regions
+        </p>
       </header>
 
-      <section className="mt-8 grid gap-4 rounded-2xl border border-amber-900/15 bg-[#f7f0df]/90 p-4 shadow-[0_12px_35px_-25px_rgba(58,38,12,0.45)] sm:grid-cols-2 lg:grid-cols-3">
-        <div className="relative lg:col-span-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-amber-900/45" />
+      <nav className="mt-8 flex flex-col gap-6 border-b border-border pb-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-8">
+        <div className="relative flex-1 sm:max-w-xs">
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={query}
             onChange={(event) => handleQueryChange(event.target.value)}
-            placeholder="Search ingredient, accord, or symbolism"
-            className="border-amber-900/20 bg-amber-50/60 pl-9 text-amber-950 placeholder:text-amber-900/45"
+            placeholder="Search ingredient, accord, symbolism"
+            className="h-8 border-0 border-b-2 border-border bg-transparent pl-7 text-sm transition-colors placeholder:text-muted-foreground focus-visible:border-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </div>
-
-        <div className="flex flex-wrap gap-2 lg:col-span-2">
-          <Button
-            variant={activeCategory === "all" ? "default" : "outline"}
-            className="rounded-full"
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm">
+          <span className="mr-2 text-muted-foreground">Category</span>
+          <button
+            type="button"
             onClick={() => handleCategoryChange("all")}
+            className={
+              activeCategory === "all"
+                ? "rounded-md bg-muted px-2.5 py-1 font-medium text-foreground"
+                : "rounded-md px-2.5 py-1 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-foreground"
+            }
           >
-            All Categories
-          </Button>
+            All
+          </button>
           {categories.map((category) => (
-            <Button
+            <button
               key={category}
-              variant={activeCategory === category ? "default" : "outline"}
-              className="rounded-full"
+              type="button"
               onClick={() => handleCategoryChange(category)}
+              className={
+                activeCategory === category
+                  ? "rounded-md bg-muted px-2.5 py-1 font-medium text-foreground"
+                  : "rounded-md px-2.5 py-1 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-foreground"
+              }
             >
               {categoryLabels[category]}
-            </Button>
+            </button>
           ))}
         </div>
-
-        <div className="flex flex-wrap gap-2 lg:col-span-3">
-          <Button
-            variant={activeRegion === "all" ? "secondary" : "outline"}
-            className="rounded-full"
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm">
+          <span className="mr-2 text-muted-foreground">Region</span>
+          <button
+            type="button"
             onClick={() => handleRegionChange("all")}
+            className={
+              activeRegion === "all"
+                ? "rounded-md bg-muted px-2.5 py-1 font-medium text-foreground"
+                : "rounded-md px-2.5 py-1 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-foreground"
+            }
           >
-            All Regions
-          </Button>
+            All
+          </button>
           {regions.map((region) => (
-            <Button
+            <button
               key={region}
-              variant={activeRegion === region ? "secondary" : "outline"}
-              className="rounded-full"
+              type="button"
               onClick={() => handleRegionChange(region)}
+              className={
+                activeRegion === region
+                  ? "rounded-md bg-muted px-2.5 py-1 font-medium text-foreground"
+                  : "rounded-md px-2.5 py-1 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-foreground"
+              }
             >
               {region}
-            </Button>
+            </button>
           ))}
         </div>
-      </section>
+      </nav>
 
-      <section className="mt-4 rounded-xl border border-amber-900/20 bg-amber-50/70 p-3 text-xs text-amber-950/80">
-        <p>
-          Affiliate disclosure: Some links are Amazon affiliate links. As an Amazon Associate, you can earn from
-          qualifying purchases.
-        </p>
-        {!amazonAffiliateTag ? (
-          <p className="mt-1 text-amber-900/80">
-            Monetization is currently inactive. Set <code>NEXT_PUBLIC_AMAZON_AFFILIATE_TAG</code> to enable your tag.
-          </p>
-        ) : null}
-      </section>
+      <p className="mt-4 text-[0.7rem] text-muted-foreground">
+        Affiliate disclosure: Some links are Amazon affiliate links. As an Amazon Associate, you can earn from qualifying purchases.
+        {!amazonAffiliateTag ? " Set NEXT_PUBLIC_AMAZON_AFFILIATE_TAG to enable your tag." : null}
+      </p>
 
-      <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as ExplorerTab)} className="mt-8 w-full">
-        <TabsList className="grid h-auto w-full grid-cols-3 bg-[#efe1c5]">
-          <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
-          <TabsTrigger value="regions">World Scent Lanes</TabsTrigger>
-          <TabsTrigger value="layering">Layering Lab</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as ExplorerTab)} className="mt-10 w-full">
+        <TabsList variant="line" className="gap-6 border-0 p-0">
+          <TabsTrigger
+            value="ingredients"
+            className="pb-2 pt-0.5 after:bottom-0 after:h-[2px] hover:text-foreground data-active:text-foreground"
+          >
+            Ingredients
+          </TabsTrigger>
+          <TabsTrigger
+            value="regions"
+            className="pb-2 pt-0.5 after:bottom-0 after:h-[2px] hover:text-foreground data-active:text-foreground"
+          >
+            World Scent Lanes
+          </TabsTrigger>
+          <TabsTrigger
+            value="layering"
+            className="pb-2 pt-0.5 after:bottom-0 after:h-[2px] hover:text-foreground data-active:text-foreground"
+          >
+            Layering
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="ingredients" className="mt-6">
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <TabsContent value="ingredients" className="mt-10">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((item) => {
               const fallbackStage = imageFallbackStage[item.id] ?? 0;
               const imageSrc = resolveImageSrc(item.imageUrl, item.name, fallbackStage);
 
               return (
-              <Card
-                key={item.id}
-                className={cn(
-                  "group relative cursor-pointer overflow-hidden border border-amber-900/20 bg-[#fcf7ec] transition-shadow duration-200 hover:shadow-[0_16px_28px_-22px_rgba(70,46,22,0.55)]",
-                )}
-                role="button"
-                tabIndex={0}
-                onClick={() => handleSelectIngredient(item)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    handleSelectIngredient(item);
-                  }
-                }}
-                aria-label={`View details for ${item.name}`}
-              >
-                <div className="relative border-b border-amber-900/10 bg-[#e8d7b4]/60 p-2">
-                  <div className="relative h-64 overflow-hidden rounded-[0.32rem] border border-amber-900/15 bg-[#efe4c9]">
+                <article
+                  key={item.id}
+                  className="group cursor-pointer rounded-md border border-border bg-card transition-colors hover:border-foreground/25 hover:bg-muted/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleSelectIngredient(item)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      handleSelectIngredient(item);
+                    }
+                  }}
+                  aria-label={`View ${item.name}`}
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-t-md border-b border-border bg-muted">
                     <Image
                       src={imageSrc}
-                      alt={`${item.name} archival herbarium scan`}
+                      alt=""
                       fill
                       quality={92}
-                      className="object-cover sepia-[0.56] saturate-[0.82]"
+                      className="object-cover sepia-[0.4] saturate-[0.75] transition-opacity duration-200 group-hover:opacity-92"
                       style={{ objectPosition: item.imageObjectPosition ?? "center 30%" }}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       onError={() => {
                         if (fallbackStage < 3) {
                           setImageFallbackStage((prev) => ({ ...prev, [item.id]: fallbackStage + 1 }));
@@ -421,430 +388,235 @@ export function HerbariumExplorer() {
                       }}
                     />
                   </div>
-                </div>
-                <CardHeader className="space-y-3 pb-2">
-                  <div className="flex flex-wrap gap-2">
-                    <Badge className="bg-amber-900 text-amber-50">{categoryLabels[item.category]}</Badge>
-                    {item.regions.map((region) => (
-                      <Badge key={`${item.id}-${region}`} variant="outline" className="border-amber-900/25 text-amber-900">
-                        {region}
-                      </Badge>
-                    ))}
+                  <div className="p-3 pt-2.5 space-y-0.5">
+                    <p className="text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground">
+                      {categoryLabels[item.category]}
+                      {item.regions.length ? ` · ${item.regions.join(", ")}` : null}
+                    </p>
+                    <h2 className="text-lg font-normal text-foreground">{item.name}</h2>
+                    {item.latin ? (
+                      <p className="text-sm italic text-muted-foreground">{item.latin}</p>
+                    ) : null}
+                    <p className="line-clamp-2 text-sm text-muted-foreground">{item.vibe}</p>
                   </div>
-                  <CardTitle className="text-2xl text-amber-950">{item.name}</CardTitle>
-                  {item.latin ? (
-                    <CardDescription className="italic text-amber-900/70">{item.latin}</CardDescription>
-                  ) : null}
-                </CardHeader>
-                <CardContent className="space-y-4 text-sm text-amber-950/85">
-                  <p>{item.vibe}</p>
-
-                  <div className="space-y-2">
-                    <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Scent profile</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {item.scentProfile.map((note) => (
-                        <Badge key={`${item.id}-profile-${note}`} variant="secondary" className="bg-amber-900/10 text-amber-900">
-                          {note}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Accords</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {item.accords.map((accord) => (
-                        <Badge key={`${item.id}-accord-${accord}`} variant="secondary" className="bg-[#d7b474]/20 text-amber-900">
-                          {accord}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  {item.symbolism?.length ? (
-                    <div className="space-y-2">
-                      <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Symbolism</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {item.symbolism.map((symbol) => (
-                          <Badge
-                            key={`${item.id}-symbol-${symbol}`}
-                            variant="outline"
-                            className="border-amber-900/30 bg-amber-50 text-amber-900"
-                          >
-                            {symbol}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
-
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    className="w-full border border-amber-900/20 bg-amber-900/10 text-amber-950 hover:bg-amber-900/15"
-                    onClick={() => handleSelectIngredient(item)}
-                  >
-                    View details
-                  </Button>
-
-                  <p className="text-xs text-amber-900/60">Image source: {item.imageSource}</p>
-                </CardContent>
-              </Card>
+                </article>
               );
             })}
           </div>
         </TabsContent>
 
-        <TabsContent value="regions" className="mt-6">
-          <div className="space-y-5">
-            <Card className="border-amber-900/15 bg-[linear-gradient(145deg,#f7ead1_0%,#efe0bf_46%,#e8d7b2_100%)]">
-              <CardHeader className="space-y-2">
-                <CardTitle className="text-2xl text-amber-950">World Scent Lanes Atlas</CardTitle>
-                <CardDescription className="max-w-4xl text-sm leading-relaxed text-amber-900/80">
-                  Six scent routes that map cultural perfume practice, signature materials, and everyday fragrance
-                  rituals. Use these lanes as inspiration while building blends in the Ingredients and Layering tabs.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {worldScentLanes.map((lane, index) => {
-                const accent = laneCardAccents[index % laneCardAccents.length];
-                const coverage = laneIngredientCoverage[lane.id] ?? { available: [], missing: [] };
-
-                return (
-                  <Card
-                    key={lane.id}
-                    className="overflow-hidden border-amber-900/20 bg-[#fbf6ea] shadow-[0_18px_35px_-28px_rgba(71,45,18,0.55)]"
-                  >
-                    <div className={cn("h-2 w-full bg-gradient-to-r", accent)} />
-                    <CardHeader className="space-y-3">
-                      <p className="text-[0.68rem] uppercase tracking-[0.2em] text-amber-900/70">{lane.routeName}</p>
-                      <CardTitle className="text-2xl text-amber-950">{lane.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4 text-sm text-amber-950/85">
-                      <p className="leading-relaxed">{lane.culturalContext}</p>
-
-                      <div className="space-y-2">
-                        <p className="text-[0.7rem] uppercase tracking-[0.18em] text-amber-900/65">Signature materials</p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {lane.signatureMaterials.map((material) => (
-                            <Badge
-                              key={`${lane.id}-${material}`}
-                              variant="secondary"
-                              className="bg-amber-900/10 text-amber-900"
-                            >
-                              {material}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="rounded-lg border border-amber-900/20 bg-amber-50/70 p-3">
-                        <p className="text-[0.7rem] uppercase tracking-[0.16em] text-amber-900/65">How scent is used</p>
-                        <p className="mt-1 leading-relaxed">{lane.usage}</p>
-                      </div>
-
-                      {coverage.available.length ? (
-                        <div className="space-y-2">
-                          <p className="text-[0.7rem] uppercase tracking-[0.18em] text-amber-900/65">
-                            Available in this atlas
-                          </p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {coverage.available.map((itemName) => (
-                              <Badge
-                                key={`${lane.id}-match-${itemName}`}
-                                variant="outline"
-                                className="border-amber-900/25 text-amber-900"
-                              >
-                                {itemName}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
-
-                      {coverage.missing.length ? (
-                        <div className="space-y-2">
-                          <p className="text-[0.7rem] uppercase tracking-[0.18em] text-amber-900/65">
-                            Missing from this atlas
-                          </p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {coverage.missing.map((itemName) => (
-                              <Badge
-                                key={`${lane.id}-missing-${itemName}`}
-                                variant="secondary"
-                                className="bg-amber-900/12 text-amber-900/75"
-                              >
-                                {itemName}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+        <TabsContent value="regions" className="mt-10">
+          <p className="mb-8 max-w-2xl text-sm text-muted-foreground">
+            Six scent routes that map cultural perfume practice and signature materials. Use these lanes as inspiration while building blends.
+          </p>
+          <div className="space-y-10">
+            {worldScentLanes.map((lane) => {
+              const coverage = laneIngredientCoverage[lane.id] ?? { available: [], missing: [] };
+              return (
+                <article key={lane.id} className="border-b border-border pb-10 last:border-0">
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">{lane.routeName}</p>
+                  <h3 className="mt-1 text-xl font-normal text-foreground">{lane.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-foreground">{lane.culturalContext}</p>
+                  <p className="mt-3 text-sm text-muted-foreground">{lane.usage}</p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Signature materials: {lane.signatureMaterials.join(", ")}
+                  </p>
+                  {coverage.available.length > 0 && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      In this atlas: {coverage.available.join(", ")}
+                    </p>
+                  )}
+                </article>
+              );
+            })}
           </div>
         </TabsContent>
 
-        <TabsContent value="layering" className="mt-6 space-y-4">
-          <Card className="border-amber-900/15 bg-[#f6efde]">
-            <CardHeader>
-              <CardTitle className="text-amber-950">Layering Blueprint</CardTitle>
-              <CardDescription className="text-amber-900/75">
-                {usageGuide.layeringRule} · {usageGuide.cycle}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-3 text-sm text-amber-950/85 md:grid-cols-2">
+        <TabsContent value="layering" className="mt-10 space-y-10">
+          <section>
+            <h3 className="text-lg font-normal text-foreground">Layering blueprint</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {usageGuide.layeringRule} · {usageGuide.cycle}
+            </p>
+            <ul className="mt-4 space-y-2 text-sm text-foreground">
               {usageGuide.dropGuide.map((item) => (
-                <p key={item} className="rounded-md border border-amber-900/15 bg-amber-50/70 px-3 py-2">
-                  {item}
-                </p>
+                <li key={item}>· {item}</li>
               ))}
-            </CardContent>
-          </Card>
+            </ul>
+          </section>
 
-          <div className="grid gap-4 lg:grid-cols-3">
-            {blendRecipes.map((blend) => (
-              <Card key={blend.name} className="border-amber-900/15 bg-[#fbf6ea]">
-                <CardHeader>
-                  <Badge variant="secondary" className="w-fit bg-amber-900/10 text-amber-900">
-                    {blend.family}
-                  </Badge>
-                  <CardTitle className="text-xl text-amber-950">{blend.name}</CardTitle>
-                  <CardDescription className="text-amber-900/75">{blend.vibe}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3 text-sm text-amber-950/85">
-                  <p>
-                    <strong>Top:</strong> {blend.layers.top}
+          <section>
+            <h3 className="text-lg font-normal text-foreground">Starter blends</h3>
+            <p className="mt-1 text-sm text-muted-foreground">One bright top, one floral or herbal heart, one resinous base.</p>
+            <div className="mt-6 space-y-8">
+              {blendRecipes.map((blend) => (
+                <article key={blend.name} className="border-b border-border pb-8 last:border-0">
+                  <p className="text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground">{blend.family}</p>
+                  <h4 className="mt-1 text-base font-normal text-foreground">{blend.name}</h4>
+                  <p className="mt-1 text-sm text-muted-foreground">{blend.vibe}</p>
+                  <p className="mt-3 text-sm text-foreground">
+                    <span className="text-muted-foreground">Top</span> {blend.layers.top} ·{" "}
+                    <span className="text-muted-foreground">Heart</span> {blend.layers.heart} ·{" "}
+                    <span className="text-muted-foreground">Base</span> {blend.layers.base}
                   </p>
-                  <p>
-                    <strong>Heart:</strong> {blend.layers.heart}
-                  </p>
-                  <p>
-                    <strong>Base:</strong> {blend.layers.base}
-                  </p>
+                  <ul className="mt-2 text-sm text-muted-foreground">
+                    {blend.formula.map((part) => (
+                      <li key={`${blend.name}-${part}`}>· {part}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </section>
 
-                  <div className="rounded-md border border-amber-900/15 bg-amber-50/70 p-3">
-                    <p className="text-xs uppercase tracking-[0.18em] text-amber-900/70">Starter Formula</p>
-                    <ul className="mt-2 space-y-1">
-                      {blend.formula.map((part) => (
-                        <li key={`${blend.name}-${part}`}>• {part}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <Card className="border-amber-900/15 bg-[#f6efde]">
-            <CardHeader>
-              <CardTitle className="text-amber-950">Safety Notes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm text-amber-950/85">
-                {usageGuide.safety.map((rule) => (
-                  <li key={rule}>• {rule}</li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+          <section>
+            <h3 className="text-lg font-normal text-foreground">Safety</h3>
+            <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+              {usageGuide.safety.map((rule) => (
+                <li key={rule}>· {rule}</li>
+              ))}
+            </ul>
+          </section>
         </TabsContent>
 
       </Tabs>
 
       {selectedIngredient ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-amber-950/45 p-4 backdrop-blur-[2px]"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/20 p-4"
           onClick={() => handleSelectIngredient(null)}
           role="presentation"
         >
-          <Card
-            className="max-h-[92vh] w-full max-w-5xl overflow-hidden border-amber-900/20 bg-[#fbf6ea]"
+          <div
+            className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden border border-border bg-card lg:max-h-[85vh] lg:grid lg:grid-cols-[minmax(280px,40%)_1fr]"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="max-h-[92vh] overflow-y-auto lg:grid lg:grid-cols-[minmax(300px,38%)_1fr] lg:overflow-hidden">
             {(() => {
               const fallbackStage = imageFallbackStage[selectedIngredient.id] ?? 0;
               const imageSrc = resolveImageSrc(selectedIngredient.imageUrl, selectedIngredient.name, fallbackStage);
               return (
-            <div className="relative h-64 overflow-hidden border-b border-amber-900/10 bg-[#eee0c2] sm:h-72 lg:h-full lg:min-h-[92vh] lg:border-b-0 lg:border-r">
-              <Image
-                src={imageSrc}
-                alt={`${selectedIngredient.name} archival herbarium scan`}
-                fill
-                quality={92}
-                className="object-contain p-2 sepia-[0.58] saturate-[0.8] lg:p-4"
-                style={{ objectPosition: selectedIngredient.imageObjectPosition ?? "center 30%" }}
-                sizes="(max-width: 768px) 100vw, 800px"
-                onError={() => {
-                  if (fallbackStage < 3) {
-                    setImageFallbackStage((prev) => ({ ...prev, [selectedIngredient.id]: fallbackStage + 1 }));
-                  }
-                }}
-              />
-            </div>
+                <div className="relative aspect-[4/3] shrink-0 overflow-hidden bg-muted lg:aspect-auto lg:min-h-0">
+                  <Image
+                    src={imageSrc}
+                    alt=""
+                    fill
+                    quality={92}
+                    className="object-contain p-4 sepia-[0.4] saturate-[0.75] lg:object-cover lg:object-center"
+                    style={{ objectPosition: selectedIngredient.imageObjectPosition ?? "center 30%" }}
+                    sizes="(max-width: 1024px) 100vw, 45vw"
+                    onError={() => {
+                      if (fallbackStage < 3) {
+                        setImageFallbackStage((prev) => ({ ...prev, [selectedIngredient.id]: fallbackStage + 1 }));
+                      }
+                    }}
+                  />
+                </div>
               );
             })()}
-            <div className="lg:max-h-[92vh] lg:overflow-y-auto">
-            <CardHeader className="space-y-3">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="space-y-1">
-                  <CardTitle className="text-3xl text-amber-950">{selectedIngredient.name}</CardTitle>
+            <div className="flex min-h-0 flex-col overflow-y-auto p-6 lg:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">
+                    {categoryLabels[selectedIngredient.category]}
+                    {selectedIngredient.regions.length ? ` · ${selectedIngredient.regions.join(", ")}` : null}
+                  </p>
+                  <h2 className="mt-1 text-2xl font-normal text-foreground">{selectedIngredient.name}</h2>
                   {selectedIngredient.latin ? (
-                    <CardDescription className="italic text-amber-900/70">{selectedIngredient.latin}</CardDescription>
+                    <p className="mt-0.5 text-sm italic text-muted-foreground">{selectedIngredient.latin}</p>
                   ) : null}
                 </div>
-                <Button
+                <button
                   type="button"
-                  variant="outline"
-                  className="border-amber-900/25"
+                  className="rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/30"
                   onClick={() => handleSelectIngredient(null)}
+                  aria-label="Close"
                 >
                   Close
-                </Button>
+                </button>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-amber-900 text-amber-50">{categoryLabels[selectedIngredient.category]}</Badge>
-                {selectedIngredient.regions.map((region) => (
-                  <Badge
-                    key={`${selectedIngredient.id}-region-modal-${region}`}
-                    variant="outline"
-                    className="border-amber-900/25 text-amber-900"
-                  >
-                    {region}
-                  </Badge>
-                ))}
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-5 text-sm text-amber-950/85">
-              <p>{selectedIngredient.vibe}</p>
 
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Scent profile</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {selectedIngredient.scentProfile.map((note) => (
-                    <Badge
-                      key={`${selectedIngredient.id}-profile-modal-${note}`}
-                      variant="secondary"
-                      className="bg-amber-900/10 text-amber-900"
-                    >
-                      {note}
-                    </Badge>
-                  ))}
+              <p className="mt-4 text-sm leading-relaxed text-foreground">{selectedIngredient.vibe}</p>
+
+              <div className="mt-6 space-y-4 text-sm">
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">Scent profile</p>
+                  <p className="mt-1 text-foreground">{selectedIngredient.scentProfile.join(", ")}</p>
                 </div>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Accords</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {selectedIngredient.accords.map((accord) => (
-                    <Badge
-                      key={`${selectedIngredient.id}-accord-modal-${accord}`}
-                      variant="secondary"
-                      className="bg-[#d7b474]/20 text-amber-900"
-                    >
-                      {accord}
-                    </Badge>
-                  ))}
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">Accords</p>
+                  <p className="mt-1 text-foreground">{selectedIngredient.accords.join(", ")}</p>
                 </div>
-              </div>
-
-              {selectedIngredient.symbolism?.length ? (
-                <div className="space-y-2">
-                  <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Symbolism</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedIngredient.symbolism.map((symbol) => (
-                      <Badge
-                        key={`${selectedIngredient.id}-symbol-modal-${symbol}`}
-                        variant="outline"
-                        className="border-amber-900/30 bg-amber-50 text-amber-900"
-                      >
-                        {symbol}
-                      </Badge>
-                    ))}
+                {selectedIngredient.symbolism?.length ? (
+                  <div>
+                    <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">Symbolism</p>
+                    <p className="mt-1 text-foreground">{selectedIngredient.symbolism.join(", ")}</p>
                   </div>
+                ) : null}
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">About</p>
+                  <p className="mt-1 leading-relaxed text-foreground">{selectedIngredient.about}</p>
                 </div>
-              ) : null}
-
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">About</p>
-                <p className="text-sm text-amber-950/85">{selectedIngredient.about}</p>
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">History</p>
+                  <p className="mt-1 leading-relaxed text-foreground">{selectedIngredient.history}</p>
+                </div>
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">Prized origin</p>
+                  <p className="mt-1 text-foreground">{selectedIngredient.prizedOrigin}</p>
+                </div>
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">Preparation</p>
+                  <ul className="mt-1 space-y-0.5 text-foreground">
+                    {selectedIngredient.preparation.map((value) => (
+                      <li key={value}>· {value}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">Facts</p>
+                  <ul className="mt-1 space-y-0.5 text-foreground">
+                    {selectedIngredient.facts.map((fact) => (
+                      <li key={fact}>· {fact}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">Good for</p>
+                  <ul className="mt-1 space-y-0.5 text-foreground">
+                    {selectedIngredient.goodFor.map((value) => (
+                      <li key={value}>· {value}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">How to use</p>
+                  <ul className="mt-1 space-y-0.5 text-foreground">
+                    {selectedIngredient.use.map((value) => (
+                      <li key={value}>· {value}</li>
+                    ))}
+                  </ul>
+                </div>
+                {selectedIngredient.caution ? (
+                  <p className="border-l-2 border-foreground/20 pl-3 text-foreground">
+                    {selectedIngredient.caution}
+                  </p>
+                ) : null}
               </div>
 
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">History</p>
-                <p className="text-sm text-amber-950/85">{selectedIngredient.history}</p>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Prized origin</p>
-                <p className="text-sm text-amber-950/85">{selectedIngredient.prizedOrigin}</p>
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Preparation</p>
-                <ul className="mt-1 space-y-1 text-amber-950/80">
-                  {selectedIngredient.preparation.map((value) => (
-                    <li key={`${selectedIngredient.id}-prep-modal-${value}`}>• {value}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Facts</p>
-                <ul className="space-y-1 text-sm text-amber-950/85">
-                  {selectedIngredient.facts.map((fact) => (
-                    <li key={`${selectedIngredient.id}-fact-${fact}`}>• {fact}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Good for</p>
-                <ul className="mt-1 space-y-1 text-amber-950/80">
-                  {selectedIngredient.goodFor.map((value) => (
-                    <li key={`${selectedIngredient.id}-for-modal-${value}`}>• {value}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">How to use</p>
-                <ul className="mt-1 space-y-1 text-amber-950/80">
-                  {selectedIngredient.use.map((value) => (
-                    <li key={`${selectedIngredient.id}-use-modal-${value}`}>• {value}</li>
-                  ))}
-                </ul>
-              </div>
-
-              {selectedIngredient.caution ? (
-                <p className="rounded-md border border-amber-900/20 bg-amber-100/60 p-2 text-xs text-amber-950">
-                  {selectedIngredient.caution}
-                </p>
-              ) : null}
-
-              <p className="text-xs text-amber-900/60">Image source: {selectedIngredient.imageSource}</p>
+              <p className="mt-6 text-[0.7rem] text-muted-foreground">
+                Image: {selectedIngredient.imageSource}
+              </p>
 
               <a
                 href={buildAmazonAffiliateSearchUrl(selectedIngredient.name)}
                 target="_blank"
                 rel="noreferrer noopener sponsored"
-                className={cn(
-                  buttonVariants({ variant: "secondary", size: "sm" }),
-                  "w-full justify-center border border-amber-900/20 bg-amber-900/10 text-amber-950 hover:bg-amber-900/15",
-                )}
+                className="mt-4 inline-block rounded-md px-2.5 py-1.5 text-sm underline underline-offset-2 transition-colors hover:bg-muted hover:no-underline"
               >
                 Shop on Amazon
               </a>
-            </CardContent>
             </div>
-            </div>
-          </Card>
+          </div>
         </div>
       ) : null}
     </div>

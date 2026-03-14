@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
+
+export const viewport: Viewport = {
+  themeColor: "#fbf8f2",
+};
 
 export const metadata: Metadata = {
   title: "Aromatherapy Herbarium",
   description:
     "Vintage-inspired aromatherapy lookup with Archive.org herbarium scans, world scent lanes, and blend layering guides.",
-  themeColor: "#E8E2D4",
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },

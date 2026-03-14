@@ -48,38 +48,39 @@
 }
 
 :root {
-  --background: oklch(0.972 0.017 87.4);
-  --foreground: oklch(0.301 0.043 60.3);
-  --card: oklch(0.985 0.014 90.6);
-  --card-foreground: oklch(0.301 0.043 60.3);
-  --popover: oklch(0.985 0.014 90.6);
-  --popover-foreground: oklch(0.301 0.043 60.3);
-  --primary: oklch(0.402 0.084 58.7);
-  --primary-foreground: oklch(0.965 0.007 75.4);
-  --secondary: oklch(0.905 0.034 80.1);
-  --secondary-foreground: oklch(0.345 0.049 60.1);
-  --muted: oklch(0.922 0.023 83.2);
-  --muted-foreground: oklch(0.498 0.035 59.3);
-  --accent: oklch(0.878 0.048 102.7);
-  --accent-foreground: oklch(0.322 0.049 58.9);
+  /* Warm, natural herbarium palette: cream paper + warm brown ink */
+  --background: #fbf8f2;
+  --foreground: #3d3630;
+  --card: #fefcf7;
+  --card-foreground: #3d3630;
+  --popover: #fefcf7;
+  --popover-foreground: #3d3630;
+  --primary: #4a4038;
+  --primary-foreground: #fbf8f2;
+  --secondary: #c9b89a;
+  --secondary-foreground: #3d3630;
+  --muted: #ebe5dc;
+  --muted-foreground: #7a7268;
+  --accent: #d9e0d0;
+  --accent-foreground: #3d3630;
   --destructive: oklch(0.56 0.21 27.3);
-  --border: oklch(0.785 0.039 77.9);
-  --input: oklch(0.872 0.028 82.5);
-  --ring: oklch(0.53 0.068 61.5);
-  --chart-1: oklch(0.57 0.12 58.8);
-  --chart-2: oklch(0.53 0.09 129.2);
-  --chart-3: oklch(0.64 0.08 83.5);
-  --chart-4: oklch(0.49 0.08 34.9);
-  --chart-5: oklch(0.71 0.06 99.1);
-  --radius: 0.72rem;
-  --sidebar: oklch(0.944 0.019 85.7);
-  --sidebar-foreground: oklch(0.301 0.043 60.3);
-  --sidebar-primary: oklch(0.402 0.084 58.7);
-  --sidebar-primary-foreground: oklch(0.965 0.007 75.4);
-  --sidebar-accent: oklch(0.905 0.034 80.1);
-  --sidebar-accent-foreground: oklch(0.345 0.049 60.1);
-  --sidebar-border: oklch(0.785 0.039 77.9);
-  --sidebar-ring: oklch(0.53 0.068 61.5);
+  --border: #d9d1c4;
+  --input: #ebe5dc;
+  --ring: #4a4038;
+  --chart-1: #573b30;
+  --chart-2: #4a4038;
+  --chart-3: #7a7268;
+  --chart-4: #c9b89a;
+  --chart-5: #c4d4b8;
+  --radius: 0.25rem;
+  --sidebar: #f7f4ee;
+  --sidebar-foreground: #3d3630;
+  --sidebar-primary: #4a4038;
+  --sidebar-primary-foreground: #fbf8f2;
+  --sidebar-accent: #ebe5dc;
+  --sidebar-accent-foreground: #3d3630;
+  --sidebar-border: #d9d1c4;
+  --sidebar-ring: #4a4038;
 }
 
 @layer base {
@@ -89,10 +90,6 @@
 
   body {
     @apply bg-background text-foreground;
-    background-image:
-      radial-gradient(circle at 20% 0%, rgb(174 128 75 / 0.12), transparent 36%),
-      radial-gradient(circle at 90% 20%, rgb(91 112 68 / 0.14), transparent 44%),
-      linear-gradient(180deg, #f5ecd9 0%, #f1e5cd 55%, #ecdebf 100%);
   }
 
   h1,
@@ -100,6 +97,8 @@
   h3,
   h4 {
     font-family: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
+    font-weight: 400;
+    letter-spacing: 0.02em;
   }
 
   html {
