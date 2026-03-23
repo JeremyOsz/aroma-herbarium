@@ -45,6 +45,35 @@ export interface WorldScentLane {
   usage: string;
 }
 
+export const teaTherapeuticEffectFilters = [
+  "calming support",
+  "digestion support",
+  "sleep support",
+  "respiratory comfort",
+  "focus support",
+  "immune support",
+] as const;
+
+export type TeaTherapeuticEffect = (typeof teaTherapeuticEffectFilters)[number];
+
+export interface TeaIngredient {
+  id: string;
+  name: string;
+  latin?: string;
+  flavorProfile: string[];
+  therapeuticEffects: TeaTherapeuticEffect[];
+  traditionallyUsedFor: string[];
+  brewGuide: {
+    waterTemp: string;
+    steepTime: string;
+    amount: string;
+  };
+  caution?: string;
+  pairsWith: string[];
+  imageUrl: string;
+  imageSource: string;
+}
+
 export const regionNotes: Record<AromaRegion, string> = {
   Mediterranean:
     "Citrus-peel brightness, herbal steam, and sun-warmed woods. Think Marseille kitchens and coastal air.",
@@ -1202,6 +1231,261 @@ export const ingredients: Ingredient[] = [
     imageUrl:
       "/images/ingredients/black-tea.jpg",
     imageSource: "Wikimedia Commons (Camellia sinensis; Köhler botanical plate)",
+  },
+];
+
+export const teaIngredients: TeaIngredient[] = [
+  {
+    id: "purple-sage",
+    name: "Purple Sage",
+    latin: "Salvia officinalis 'Purpurascens'",
+    flavorProfile: ["earthy", "savory", "softly camphoraceous"],
+    therapeuticEffects: ["calming support", "respiratory comfort", "focus support"],
+    traditionallyUsedFor: [
+      "Traditionally used to support gentle calm during mentally busy evenings.",
+      "Often brewed as a warm herbal infusion for seasonal throat and respiratory comfort.",
+      "May support mental clarity when used in small, balanced tea blends.",
+    ],
+    brewGuide: {
+      waterTemp: "90-95 C",
+      steepTime: "5-7 minutes",
+      amount: "1-2 tsp dried leaf per 250 ml",
+    },
+    caution:
+      "Avoid high-frequency use during pregnancy; pause use if it feels drying. Traditional use only, not medical advice.",
+    pairsWith: ["lemon balm", "lavender", "fennel seed"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/2/20/Salvia_officinalis_%27Purpurascens%27_kz01.jpg",
+    imageSource: "Wikimedia Commons (Salvia officinalis 'Purpurascens')",
+  },
+  {
+    id: "chamomile",
+    name: "Chamomile",
+    latin: "Matricaria chamomilla",
+    flavorProfile: ["apple-like", "honeyed", "soft floral"],
+    therapeuticEffects: ["calming support", "sleep support", "digestion support"],
+    traditionallyUsedFor: [
+      "Traditionally used to support winding down before sleep.",
+      "Often used after meals for gentle digestive comfort.",
+      "May support a calmer nervous-system tone during stress-heavy periods.",
+    ],
+    brewGuide: {
+      waterTemp: "95 C",
+      steepTime: "5-8 minutes",
+      amount: "1 tbsp flowers per 250 ml",
+    },
+    caution: "May not suit people sensitive to ragweed-family plants.",
+    pairsWith: ["lavender", "lemon balm", "rooibos"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/c/c8/Matricaria_February_2008-1.jpg",
+    imageSource: "Wikimedia Commons (Matricaria chamomilla)",
+  },
+  {
+    id: "peppermint",
+    name: "Peppermint",
+    latin: "Mentha x piperita",
+    flavorProfile: ["cooling", "minty", "bright"],
+    therapeuticEffects: ["digestion support", "focus support", "respiratory comfort"],
+    traditionallyUsedFor: [
+      "Traditionally used for post-meal digestive ease.",
+      "Often used to support clear-headed alertness without caffeine.",
+      "May provide a cooling sensation associated with easier breathing comfort.",
+    ],
+    brewGuide: {
+      waterTemp: "95 C",
+      steepTime: "4-6 minutes",
+      amount: "1 tbsp leaf per 250 ml",
+    },
+    caution: "May aggravate reflux in sensitive people.",
+    pairsWith: ["ginger", "fennel seed", "nettle"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/72/Pfefferminze_natur_peppermint.jpg",
+    imageSource: "Wikimedia Commons (Mentha x piperita / peppermint)",
+  },
+  {
+    id: "ginger",
+    name: "Ginger Root",
+    latin: "Zingiber officinale",
+    flavorProfile: ["warming", "spicy", "zesty"],
+    therapeuticEffects: ["digestion support", "immune support", "respiratory comfort"],
+    traditionallyUsedFor: [
+      "Traditionally used to support digestion and reduce queasy feelings.",
+      "Often used in winter infusions for warming, seasonal comfort.",
+      "May support throat comfort when sipped warm with honey/lemon.",
+    ],
+    brewGuide: {
+      waterTemp: "100 C",
+      steepTime: "8-12 minutes",
+      amount: "5-8 thin slices per 250 ml",
+    },
+    caution: "Use moderate portions if sensitive to spicy preparations.",
+    pairsWith: ["peppermint", "licorice root", "hibiscus"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/1/18/Koeh-146-no_text.jpg",
+    imageSource: "Wikimedia Commons (Zingiber officinale)",
+  },
+  {
+    id: "lemon-balm",
+    name: "Lemon Balm",
+    latin: "Melissa officinalis",
+    flavorProfile: ["citrusy", "soft green", "gentle"],
+    therapeuticEffects: ["calming support", "sleep support", "focus support"],
+    traditionallyUsedFor: [
+      "Traditionally used to support emotional calm and reduce tension.",
+      "Often used in evening tea to support easier sleep onset.",
+      "May support focused calm for daytime tasks when used lightly.",
+    ],
+    brewGuide: {
+      waterTemp: "90-95 C",
+      steepTime: "5-7 minutes",
+      amount: "1 tbsp dried leaf per 250 ml",
+    },
+    caution: "Use with care alongside sedative medications.",
+    pairsWith: ["purple sage", "chamomile", "lavender"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/7/70/Lemon_balm_plant.jpg",
+    imageSource: "Wikimedia Commons (Melissa officinalis)",
+  },
+  {
+    id: "tulsi",
+    name: "Tulsi (Holy Basil)",
+    latin: "Ocimum tenuiflorum",
+    flavorProfile: ["peppery", "clove-like", "green"],
+    therapeuticEffects: ["calming support", "focus support", "immune support"],
+    traditionallyUsedFor: [
+      "Traditionally used as an adaptogenic herb to support stress resilience.",
+      "Often used to support stable energy and focused calm.",
+      "May support seasonal wellness routines as part of daily tea practice.",
+    ],
+    brewGuide: {
+      waterTemp: "95 C",
+      steepTime: "5-8 minutes",
+      amount: "1 tbsp leaf per 250 ml",
+    },
+    caution: "Consult a clinician if pregnant or on blood-thinning medication.",
+    pairsWith: ["ginger", "rooibos", "hibiscus"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/0/01/Tulsi_or_Tulasi_Holy_basil.jpg",
+    imageSource: "Wikimedia Commons (Ocimum tenuiflorum / tulsi)",
+  },
+  {
+    id: "hibiscus",
+    name: "Hibiscus",
+    latin: "Hibiscus sabdariffa",
+    flavorProfile: ["tart", "berry-like", "refreshing"],
+    therapeuticEffects: ["immune support", "digestion support", "calming support"],
+    traditionallyUsedFor: [
+      "Traditionally used as a cooling, vitamin-rich herbal infusion.",
+      "Often used for refreshing digestion support after heavy meals.",
+      "May support relaxation when served warm with balancing herbs.",
+    ],
+    brewGuide: {
+      waterTemp: "95 C",
+      steepTime: "6-10 minutes",
+      amount: "1 tbsp calyces per 250 ml",
+    },
+    caution: "May be too tart for sensitive stomachs; adjust strength.",
+    pairsWith: ["ginger", "rooibos", "licorice root"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/c/cc/Roselle%2C_Hibiscus_sabdariffa%2C_2014_01.JPG",
+    imageSource: "Wikimedia Commons (Hibiscus sabdariffa / roselle)",
+  },
+  {
+    id: "rooibos",
+    name: "Rooibos",
+    latin: "Aspalathus linearis",
+    flavorProfile: ["malty", "smooth", "naturally sweet"],
+    therapeuticEffects: ["calming support", "immune support", "digestion support"],
+    traditionallyUsedFor: [
+      "Traditionally used as a caffeine-free base for calming daily tea.",
+      "Often used to support hydration-friendly, low-tannin tea routines.",
+      "May support gentle digestive comfort in evening blends.",
+    ],
+    brewGuide: {
+      waterTemp: "100 C",
+      steepTime: "6-10 minutes",
+      amount: "1 tbsp per 250 ml",
+    },
+    pairsWith: ["chamomile", "tulsi", "fennel seed"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/2/20/Rooibos_%28Aspalathus_linearis%29PICT2813.JPG",
+    imageSource: "Wikimedia Commons (Aspalathus linearis / rooibos)",
+  },
+  {
+    id: "nettle",
+    name: "Nettle",
+    latin: "Urtica dioica",
+    flavorProfile: ["green", "grassy", "mineral-rich"],
+    therapeuticEffects: ["immune support", "focus support", "digestion support"],
+    traditionallyUsedFor: [
+      "Traditionally used as a nutritive herb in daily tonic infusions.",
+      "Often used to support seasonal wellness and mineral intake.",
+      "May support steady, clear energy without caffeine.",
+    ],
+    brewGuide: {
+      waterTemp: "95 C",
+      steepTime: "7-10 minutes",
+      amount: "1 tbsp dried leaf per 250 ml",
+    },
+    caution: "Start with light strength if new to nettle tea.",
+    pairsWith: ["peppermint", "lemon balm", "rooibos"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Fen_nettle_%28Urtica_dioica_ssp._galeopsifolia%29_-_geograph.org.uk_-_5423125.jpg",
+    imageSource: "Wikimedia Commons (Urtica dioica)",
+  },
+  {
+    id: "fennel-seed",
+    name: "Fennel Seed",
+    latin: "Foeniculum vulgare",
+    flavorProfile: ["sweet anise", "warming", "aromatic"],
+    therapeuticEffects: ["digestion support", "respiratory comfort", "calming support"],
+    traditionallyUsedFor: [
+      "Traditionally used after meals for digestive comfort and less bloating.",
+      "Often used in warm tea for throat comfort in colder months.",
+      "May support a settled feeling when paired with mint or sage.",
+    ],
+    brewGuide: {
+      waterTemp: "100 C",
+      steepTime: "8-10 minutes",
+      amount: "1 tsp lightly crushed seeds per 250 ml",
+    },
+    caution: "Use culinary-level portions; avoid concentrated use in pregnancy.",
+    pairsWith: ["peppermint", "purple sage", "ginger"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/c/c0/Foeniculum_July_2011-1a.jpg",
+    imageSource: "Wikimedia Commons (Foeniculum vulgare / fennel)",
+  },
+  {
+    id: "licorice-root",
+    name: "Licorice Root",
+    latin: "Glycyrrhiza glabra",
+    flavorProfile: ["sweet", "earthy", "rounding"],
+    therapeuticEffects: ["respiratory comfort", "digestion support", "immune support"],
+    traditionallyUsedFor: [
+      "Traditionally used to support throat comfort and smoother herbal blends.",
+      "Often used in digestive tea formulas for soothing sweetness.",
+      "May support seasonal comfort as part of short-term tea routines.",
+    ],
+    brewGuide: {
+      waterTemp: "100 C",
+      steepTime: "8-12 minutes",
+      amount: "1 tsp chopped root per 250 ml",
+    },
+    caution: "Avoid regular use with high blood pressure or potassium imbalance concerns.",
+    pairsWith: ["ginger", "hibiscus", "tulsi"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/dd/Illustration_Glycyrrhiza_glabra0.jpg",
+    imageSource: "Wikimedia Commons (Glycyrrhiza glabra / licorice)",
+  },
+  {
+    id: "lavender-tea",
+    name: "Lavender",
+    latin: "Lavandula angustifolia",
+    flavorProfile: ["floral", "sweet-herbal", "aromatic"],
+    therapeuticEffects: ["calming support", "sleep support", "digestion support"],
+    traditionallyUsedFor: [
+      "Traditionally used to support relaxation and bedtime wind-down.",
+      "Often used in tiny amounts to support stress decompression rituals.",
+      "May support digestive comfort when blended gently with chamomile.",
+    ],
+    brewGuide: {
+      waterTemp: "90 C",
+      steepTime: "4-6 minutes",
+      amount: "1-2 tsp buds per 250 ml",
+    },
+    caution: "Keep doses light to avoid a perfumey, bitter cup.",
+    pairsWith: ["chamomile", "lemon balm", "purple sage"],
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/4/40/Lavandula_angustifolia_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-087.jpg",
+    imageSource: "Wikimedia Commons (Lavandula angustifolia)",
   },
 ];
 

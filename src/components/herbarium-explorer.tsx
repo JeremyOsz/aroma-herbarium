@@ -15,17 +15,22 @@ import {
   categoryLabels,
   ingredients,
   regionNotes,
+  teaIngredients,
+  teaTherapeuticEffectFilters,
   worldScentLanes,
   type AromaCategory,
   type AromaRegion,
   type Ingredient,
+  type TeaIngredient,
+  type TeaTherapeuticEffect,
   usageGuide,
 } from "@/data/aromatherapy";
 import { cn } from "@/lib/utils";
 
 const categories = Object.keys(categoryLabels) as AromaCategory[];
 const regions = Object.keys(regionNotes) as AromaRegion[];
-const tabs = ["ingredients", "regions", "layering"] as const;
+const teaEffects = [...teaTherapeuticEffectFilters];
+const tabs = ["ingredients", "tea-therapy", "regions", "layering"] as const;
 type ExplorerTab = (typeof tabs)[number];
 const amazonAffiliateTag = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_TAG?.trim();
 const laneCardAccents = [
@@ -47,6 +52,10 @@ function isAromaCategory(value: string | null): value is AromaCategory {
 
 function isAromaRegion(value: string | null): value is AromaRegion {
   return value !== null && (regions as readonly string[]).includes(value);
+}
+
+function isTeaEffect(value: string | null): value is TeaTherapeuticEffect {
+  return value !== null && teaEffects.includes(value as TeaTherapeuticEffect);
 }
 
 function buildAmazonAffiliateSearchUrl(name: string) {
@@ -139,6 +148,7 @@ export function HerbariumExplorer() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const ingredientById = useMemo(() => new Map(ingredients.map((item) => [item.id, item])), []);
+  const teaById = useMemo(() => new Map(teaIngredients.map((item) => [item.id, item])), []);
 
   const activeTab = (() => {
     const tabValue = searchParams.get("tab");
@@ -156,6 +166,15 @@ export function HerbariumExplorer() {
   const selectedIngredient = (() => {
     const ingredientId = searchParams.get("ingredient");
     return ingredientId ? ingredientById.get(ingredientId) ?? null : null;
+  })();
+  const teaQuery = searchParams.get("teaQuery") ?? "";
+  const activeTeaEffect: TeaTherapeuticEffect | "all" = (() => {
+    const effectValue = searchParams.get("teaEffect");
+    return isTeaEffect(effectValue) ? effectValue : "all";
+  })();
+  const selectedTea = (() => {
+    const teaId = searchParams.get("tea");
+    return teaId ? teaById.get(teaId) ?? null : null;
   })();
   const [imageFallbackStage, setImageFallbackStage] = useState<Record<string, number>>({});
 
@@ -189,24 +208,40 @@ export function HerbariumExplorer() {
     updateUrlParams({ query: value.trim().length ? value : null });
   };
 
+  const handleTeaQueryChange = (value: string) => {
+    updateUrlParams({ teaQuery: value.trim().length ? value : null });
+  };
+
+  const handleTeaEffectChange = (value: TeaTherapeuticEffect | "all") => {
+    updateUrlParams({ teaEffect: value === "all" ? null : value });
+  };
+
   const handleSelectIngredient = useCallback((item: Ingredient | null) => {
-    updateUrlParams({ ingredient: item?.id ?? null });
+    updateUrlParams({ ingredient: item?.id ?? null, tea: null });
+  }, [updateUrlParams]);
+
+  const handleSelectTea = useCallback((item: TeaIngredient | null) => {
+    updateUrlParams({ tea: item?.id ?? null, ingredient: null });
   }, [updateUrlParams]);
 
   useEffect(() => {
-    if (!selectedIngredient) {
+    if (!selectedIngredient && !selectedTea) {
       return;
     }
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        if (selectedTea) {
+          handleSelectTea(null);
+          return;
+        }
         handleSelectIngredient(null);
       }
     };
 
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
-  }, [handleSelectIngredient, selectedIngredient]);
+  }, [handleSelectIngredient, handleSelectTea, selectedIngredient, selectedTea]);
 
   const filtered = useMemo(() => {
     return ingredients.filter((item) => {
@@ -230,6 +265,21 @@ export function HerbariumExplorer() {
       return acc;
     }, {});
   }, []);
+
+  const filteredTeas = useMemo(() => {
+    return teaIngredients.filter((item) => {
+      const normalizedTeaQuery = teaQuery.toLowerCase();
+      const queryMatch =
+        teaQuery.trim().length === 0 ||
+        item.name.toLowerCase().includes(normalizedTeaQuery) ||
+        (item.latin?.toLowerCase().includes(normalizedTeaQuery) ?? false) ||
+        item.flavorProfile.join(" ").toLowerCase().includes(normalizedTeaQuery) ||
+        item.traditionallyUsedFor.join(" ").toLowerCase().includes(normalizedTeaQuery) ||
+        item.therapeuticEffects.join(" ").toLowerCase().includes(normalizedTeaQuery);
+      const effectMatch = activeTeaEffect === "all" || item.therapeuticEffects.includes(activeTeaEffect);
+      return queryMatch && effectMatch;
+    });
+  }, [activeTeaEffect, teaQuery]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -375,8 +425,9 @@ export function HerbariumExplorer() {
       </section>
 
       <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as ExplorerTab)} className="mt-8 w-full">
-        <TabsList className="grid h-auto w-full grid-cols-3 bg-[#efe1c5]">
+        <TabsList className="grid h-auto w-full grid-cols-2 bg-[#efe1c5] md:grid-cols-4">
           <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
+          <TabsTrigger value="tea-therapy">Tea Therapy</TabsTrigger>
           <TabsTrigger value="regions">World Scent Lanes</TabsTrigger>
           <TabsTrigger value="layering">Layering Lab</TabsTrigger>
         </TabsList>
@@ -490,6 +541,149 @@ export function HerbariumExplorer() {
                   <p className="text-xs text-amber-900/60">Image source: {item.imageSource}</p>
                 </CardContent>
               </Card>
+              );
+            })}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="tea-therapy" className="mt-6 space-y-4">
+          <Card className="border-amber-900/15 bg-[#f7efdd]">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-2xl text-amber-950">Herbal Tea Therapy Notebook</CardTitle>
+              <CardDescription className="text-sm leading-relaxed text-amber-900/80">
+                Traditional wellness language only: these notes describe how herbs are traditionally used in tea
+                culture and are not medical treatment guidance.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="rounded-lg border border-amber-900/20 bg-amber-100/60 px-3 py-2 text-xs text-amber-950">
+                Traditional uses only; not medical advice; not intended to diagnose, treat, or cure.
+              </p>
+            </CardContent>
+          </Card>
+
+          <section className="grid gap-4 rounded-2xl border border-amber-900/15 bg-[#f7f0df]/90 p-4 shadow-[0_12px_35px_-25px_rgba(58,38,12,0.45)]">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-amber-900/45" />
+              <Input
+                value={teaQuery}
+                onChange={(event) => handleTeaQueryChange(event.target.value)}
+                placeholder="Search tea, flavor profile, or traditional use"
+                className="border-amber-900/20 bg-amber-50/60 pl-9 text-amber-950 placeholder:text-amber-900/45"
+              />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant={activeTeaEffect === "all" ? "default" : "secondary"}
+                className={cn(
+                  "rounded-full px-4",
+                  activeTeaEffect === "all" ? "bg-amber-900 text-amber-50" : "bg-amber-900/10 text-amber-900",
+                )}
+                onClick={() => handleTeaEffectChange("all")}
+              >
+                All effects
+              </Button>
+              {teaEffects.map((effect) => (
+                <Button
+                  key={`tea-effect-${effect}`}
+                  type="button"
+                  variant={activeTeaEffect === effect ? "default" : "secondary"}
+                  className={cn(
+                    "rounded-full px-4 capitalize",
+                    activeTeaEffect === effect ? "bg-amber-900 text-amber-50" : "bg-amber-900/10 text-amber-900",
+                  )}
+                  onClick={() => handleTeaEffectChange(effect)}
+                >
+                  {effect}
+                </Button>
+              ))}
+            </div>
+          </section>
+
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {filteredTeas.map((item) => {
+              const teaImageKey = `tea-${item.id}`;
+              const fallbackStage = imageFallbackStage[teaImageKey] ?? 0;
+              const imageSrc = resolveImageSrc(item.imageUrl, item.name, fallbackStage);
+              return (
+                <Card
+                  key={item.id}
+                  className="group relative cursor-pointer overflow-hidden border border-amber-900/20 bg-[#fcf7ec] transition-shadow duration-200 hover:shadow-[0_16px_28px_-22px_rgba(70,46,22,0.55)]"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleSelectTea(item)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      handleSelectTea(item);
+                    }
+                  }}
+                  aria-label={`View tea details for ${item.name}`}
+                >
+                  <div className="relative border-b border-amber-900/10 bg-[#e8d7b4]/60 p-2">
+                    <div className="relative h-52 overflow-hidden rounded-[0.32rem] border border-amber-900/15 bg-[#efe4c9]">
+                      <Image
+                        src={imageSrc}
+                        alt={`${item.name} tea herb reference image`}
+                        fill
+                        quality={90}
+                        className="object-cover sepia-[0.56] saturate-[0.82]"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        onError={() => {
+                          if (fallbackStage < 3) {
+                            setImageFallbackStage((prev) => ({ ...prev, [teaImageKey]: fallbackStage + 1 }));
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <CardHeader className="space-y-3 pb-2">
+                    <div className="flex flex-wrap gap-2">
+                      <Badge className="bg-[#50623f] text-[#edf2e6]">Herbal Tea</Badge>
+                      {item.id === "purple-sage" ? (
+                        <Badge className="bg-[#5f456f] text-[#f4ecfa]">Featured</Badge>
+                      ) : null}
+                      {item.therapeuticEffects.map((effect) => (
+                        <Badge key={`${item.id}-effect-${effect}`} variant="outline" className="border-amber-900/25 text-amber-900">
+                          {effect}
+                        </Badge>
+                      ))}
+                    </div>
+                    <CardTitle className="text-2xl text-amber-950">{item.name}</CardTitle>
+                    {item.latin ? <CardDescription className="italic text-amber-900/70">{item.latin}</CardDescription> : null}
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm text-amber-950/85">
+                    <div className="space-y-2">
+                      <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Flavor profile</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {item.flavorProfile.map((note) => (
+                          <Badge key={`${item.id}-flavor-${note}`} variant="secondary" className="bg-amber-900/10 text-amber-900">
+                            {note}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Traditionally used for</p>
+                      <p className="text-sm leading-relaxed">{item.traditionallyUsedFor[0]}</p>
+                    </div>
+                    <div className="rounded-md border border-amber-900/15 bg-amber-50/70 p-3">
+                      <p className="text-xs uppercase tracking-[0.18em] text-amber-900/70">Brew guide</p>
+                      <p className="mt-1">
+                        {item.brewGuide.amount} · {item.brewGuide.waterTemp} · {item.brewGuide.steepTime}
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      className="w-full border border-amber-900/20 bg-amber-900/10 text-amber-950 hover:bg-amber-900/15"
+                      onClick={() => handleSelectTea(item)}
+                    >
+                      View tea details
+                    </Button>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
@@ -656,6 +850,157 @@ export function HerbariumExplorer() {
         </TabsContent>
 
       </Tabs>
+
+      {selectedTea ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-amber-950/45 p-4 backdrop-blur-[2px]"
+          onClick={() => handleSelectTea(null)}
+          role="presentation"
+        >
+          <Card
+            className="max-h-[92vh] w-full max-w-5xl overflow-hidden border-amber-900/20 bg-[#fbf6ea]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="max-h-[92vh] overflow-y-auto lg:grid lg:grid-cols-[minmax(300px,38%)_1fr] lg:overflow-hidden">
+              {(() => {
+                const teaImageKey = `tea-${selectedTea.id}`;
+                const fallbackStage = imageFallbackStage[teaImageKey] ?? 0;
+                const imageSrc = resolveImageSrc(selectedTea.imageUrl, selectedTea.name, fallbackStage);
+                return (
+                  <div className="relative h-64 overflow-hidden border-b border-amber-900/10 bg-[#eee0c2] sm:h-72 lg:h-full lg:min-h-[92vh] lg:border-b-0 lg:border-r">
+                    <Image
+                      src={imageSrc}
+                      alt={`${selectedTea.name} tea herb reference image`}
+                      fill
+                      quality={92}
+                      className="object-cover sepia-[0.58] saturate-[0.8]"
+                      sizes="(max-width: 768px) 100vw, 800px"
+                      onError={() => {
+                        if (fallbackStage < 3) {
+                          setImageFallbackStage((prev) => ({ ...prev, [teaImageKey]: fallbackStage + 1 }));
+                        }
+                      }}
+                    />
+                  </div>
+                );
+              })()}
+              <div className="lg:max-h-[92vh] lg:overflow-y-auto">
+                <CardHeader className="space-y-3">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <CardTitle className="text-3xl text-amber-950">{selectedTea.name}</CardTitle>
+                        {selectedTea.id === "purple-sage" ? (
+                          <Badge className="bg-[#5f456f] text-[#f4ecfa]">Featured</Badge>
+                        ) : null}
+                      </div>
+                      {selectedTea.latin ? (
+                        <CardDescription className="italic text-amber-900/70">{selectedTea.latin}</CardDescription>
+                      ) : null}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="border-amber-900/25"
+                      onClick={() => handleSelectTea(null)}
+                    >
+                      Close
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge className="bg-[#50623f] text-[#edf2e6]">Herbal Tea</Badge>
+                    {selectedTea.therapeuticEffects.map((effect) => (
+                      <Badge
+                        key={`${selectedTea.id}-effect-modal-${effect}`}
+                        variant="outline"
+                        className="border-amber-900/25 text-amber-900"
+                      >
+                        {effect}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-5 text-sm text-amber-950/85">
+                  <p className="rounded-md border border-amber-900/20 bg-amber-100/60 p-2 text-xs text-amber-950">
+                    Traditional uses only; not medical advice; not intended to diagnose, treat, or cure.
+                  </p>
+
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Flavor profile</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedTea.flavorProfile.map((value) => (
+                        <Badge
+                          key={`${selectedTea.id}-flavor-modal-${value}`}
+                          variant="secondary"
+                          className="bg-amber-900/10 text-amber-900"
+                        >
+                          {value}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Traditionally used for</p>
+                    <ul className="space-y-1 text-sm text-amber-950/85">
+                      {selectedTea.traditionallyUsedFor.map((value) => (
+                        <li key={`${selectedTea.id}-traditional-${value}`}>• {value}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Therapeutic effect tags</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedTea.therapeuticEffects.map((value) => (
+                        <Badge
+                          key={`${selectedTea.id}-effect-tag-${value}`}
+                          variant="secondary"
+                          className="bg-[#d7b474]/20 text-amber-900"
+                        >
+                          {value}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="rounded-md border border-amber-900/15 bg-amber-50/70 p-3">
+                    <p className="text-xs uppercase tracking-[0.18em] text-amber-900/70">Brew guide</p>
+                    <ul className="mt-2 space-y-1">
+                      <li>• Amount: {selectedTea.brewGuide.amount}</li>
+                      <li>• Water temperature: {selectedTea.brewGuide.waterTemp}</li>
+                      <li>• Steep time: {selectedTea.brewGuide.steepTime}</li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.18em] text-amber-900/60">Pairs well with</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedTea.pairsWith.map((pairing) => (
+                        <Badge
+                          key={`${selectedTea.id}-pairing-${pairing}`}
+                          variant="outline"
+                          className="border-amber-900/25 text-amber-900"
+                        >
+                          {pairing}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  {selectedTea.caution ? (
+                    <p className="rounded-md border border-amber-900/20 bg-amber-100/60 p-2 text-xs text-amber-950">
+                      {selectedTea.caution}
+                    </p>
+                  ) : null}
+
+                  <p className="text-xs text-amber-900/60">Image source: {selectedTea.imageSource}</p>
+                </CardContent>
+              </div>
+            </div>
+          </Card>
+        </div>
+      ) : null}
 
       {selectedIngredient ? (
         <div
