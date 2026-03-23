@@ -26,7 +26,9 @@ import {
   usageGuide,
 } from "@/data/aromatherapy";
 import {
+  formatAvgTempC,
   formatSunsetMinutes,
+  getFloraSalienceLabel,
   monthLabels,
   monthlyClimate,
   seasonalMarkers,
@@ -52,17 +54,26 @@ const laneCardAccents = [
 const chartColors = {
   sunshine: "#c58a2f",
   sunset: "#466a4b",
+  temp: "#2a6d7d",
 };
 
 function buildPolyline(points: { x: number; y: number }[]) {
   return points.map((point) => `${point.x},${point.y}`).join(" ");
 }
 
-function getPollenRiskClass(score: number) {
+function getSeasonalActivityClass(score: number) {
   if (score >= 75) return "bg-[#8c2f39] text-amber-50";
   if (score >= 55) return "bg-[#b55d2e] text-amber-50";
   if (score >= 30) return "bg-[#d2a34f] text-amber-950";
   return "bg-[#dfe7d5] text-[#32462e]";
+}
+
+function getAvgTempCellClass(tempC: number) {
+  if (tempC < 7) return "border-sky-400/35 bg-sky-200/75 text-sky-950";
+  if (tempC < 11) return "border-sky-300/30 bg-sky-100/80 text-amber-950";
+  if (tempC < 15) return "border-amber-400/35 bg-amber-200/60 text-amber-950";
+  if (tempC < 18) return "border-orange-400/35 bg-orange-200/55 text-amber-950";
+  return "border-rose-400/35 bg-rose-200/60 text-amber-950";
 }
 
 function getContributionClass(score: number) {
@@ -70,6 +81,12 @@ function getContributionClass(score: number) {
   if (score >= 55) return "bg-[#b55d2e]/90 text-amber-50";
   if (score >= 30) return "bg-[#e3bc68] text-amber-950";
   return "bg-[#d9e4cd] text-[#32462e]";
+}
+
+function getSeasonalMarkerTypeBadgeClass(type: "tree" | "blossom" | "grass") {
+  if (type === "tree") return "text-[#466a4b]";
+  if (type === "grass") return "text-[#3d5c42]";
+  return "text-[#8a5730]";
 }
 
 function isExplorerTab(value: string | null): value is ExplorerTab {
@@ -130,6 +147,15 @@ function resolveImageSrc(imageUrl: string, label: string, stage: number) {
     return buildArchiveServicesImgUrl(imageUrl);
   }
   return buildInlineFallbackSvg(label);
+}
+
+/** Skip the image optimizer for these sources so the browser loads them directly. Server-side fetches (Wikimedia, archive.org) are often rate-limited or time out; data URLs are not optimized reliably. */
+function isUnoptimizedImageSrc(src: string) {
+  return (
+    src.startsWith("data:") ||
+    src.startsWith("https://upload.wikimedia.org/") ||
+    src.startsWith("https://archive.org/")
+  );
 }
 
 function normalizeScentToken(value: string) {
@@ -316,23 +342,28 @@ export function HerbariumExplorer() {
   const climateChart = useMemo(() => {
     const width = 920;
     const height = 330;
-    const padding = { top: 22, right: 54, bottom: 44, left: 56 };
+    const padding = { top: 22, right: 54, bottom: 44, left: 80 };
     const plotWidth = width - padding.left - padding.right;
     const plotHeight = height - padding.top - padding.bottom;
     const pointCount = monthlyClimate.length;
 
     const sunshineValues = monthlyClimate.map((point) => point.sunshineHoursAvg);
     const sunsetValues = monthlyClimate.map((point) => point.sunsetAvgMinutes);
+    const tempValues = monthlyClimate.map((point) => point.avgTempC);
     const sunshineMin = Math.min(...sunshineValues);
     const sunshineMax = Math.max(...sunshineValues);
     const sunsetMin = Math.min(...sunsetValues);
     const sunsetMax = Math.max(...sunsetValues);
+    const tempMin = Math.min(...tempValues);
+    const tempMax = Math.max(...tempValues);
 
     const xForIndex = (index: number) => padding.left + (index / (pointCount - 1)) * plotWidth;
     const yForSunshine = (value: number) =>
       padding.top + ((sunshineMax - value) / Math.max(1, sunshineMax - sunshineMin)) * plotHeight;
     const yForSunset = (value: number) =>
       padding.top + ((sunsetMax - value) / Math.max(1, sunsetMax - sunsetMin)) * plotHeight;
+    const yForTemp = (value: number) =>
+      padding.top + ((tempMax - value) / Math.max(1, tempMax - tempMin)) * plotHeight;
 
     const sunshinePoints = monthlyClimate.map((point, index) => ({
       month: point.month,
@@ -348,6 +379,13 @@ export function HerbariumExplorer() {
       value: point.sunsetAvgMinutes,
     }));
 
+    const tempPoints = monthlyClimate.map((point, index) => ({
+      month: point.month,
+      x: xForIndex(index),
+      y: yForTemp(point.avgTempC),
+      value: point.avgTempC,
+    }));
+
     const tickCount = 5;
     const sunshineTicks = Array.from({ length: tickCount }, (_, index) => {
       const ratio = index / (tickCount - 1);
@@ -359,6 +397,11 @@ export function HerbariumExplorer() {
       const value = Math.round(sunsetMax - ratio * (sunsetMax - sunsetMin));
       return { value, y: yForSunset(value) };
     });
+    const tempTicks = Array.from({ length: tickCount }, (_, index) => {
+      const ratio = index / (tickCount - 1);
+      const value = Math.round((tempMax - ratio * (tempMax - tempMin)) * 10) / 10;
+      return { value, y: yForTemp(value) };
+    });
 
     return {
       width,
@@ -366,42 +409,53 @@ export function HerbariumExplorer() {
       padding,
       sunshinePoints,
       sunsetPoints,
+      tempPoints,
       sunshineTicks,
       sunsetTicks,
+      tempTicks,
     };
   }, []);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <header className="relative isolate overflow-hidden rounded-[2rem] border border-amber-900/20 bg-[radial-gradient(circle_at_5%_4%,rgba(164,112,61,0.28),transparent_35%),radial-gradient(circle_at_84%_16%,rgba(77,109,74,0.3),transparent_38%),linear-gradient(160deg,#f8f1e0_0%,#efe1c6_50%,#e4d0ae_100%)] p-7 shadow-[0_24px_55px_-30px_rgba(47,29,8,0.6)] sm:p-10">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(86,57,25,0.07)_0,rgba(86,57,25,0.07)_1px,transparent_1px,transparent_12px)] opacity-45" />
-        <div className="pointer-events-none absolute -right-24 -top-20 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(102,66,32,0.22),transparent_72%)] blur-2xl" />
-        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end">
-          <div className="space-y-6">
-            <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-amber-900/75">
-              <span className="h-px w-8 bg-amber-900/35" />
+      <header className="relative isolate overflow-hidden rounded-[2.5rem] border border-[#5c4030]/12 bg-[linear-gradient(98deg,#fcf9f0_0%,#f3ead8_42%,#e8e0d0_100%)] p-8 shadow-[0_28px_60px_-32px_rgba(35,22,8,0.55)] sm:p-11 lg:p-12">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.4] mix-blend-multiply"
+          style={{
+            backgroundImage: `radial-gradient(circle at 12% 18%, rgba(139, 90, 48, 0.18) 0%, transparent 42%),
+              radial-gradient(circle at 88% 12%, rgba(72, 98, 62, 0.16) 0%, transparent 40%)`,
+          }}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgba(72,48,28,0.06)_0,rgba(72,48,28,0.06)_1px,transparent_1px,transparent_11px)] opacity-50" />
+        <div className="pointer-events-none absolute -right-16 top-0 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(118,92,58,0.14),transparent_68%)] blur-3xl" />
+        <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1fr)_min(100%,22rem)] lg:items-start lg:gap-12">
+          <div className="space-y-7 font-sans">
+            <p className="inline-flex items-center gap-3 text-[0.7rem] font-medium uppercase tracking-[0.32em] text-[#5c442e]/85">
+              <span className="h-px w-10 bg-[#5c442e]/30" aria-hidden />
               Aromatherapy Herbarium
             </p>
-            <h1 className="max-w-4xl text-4xl font-semibold leading-[1.04] tracking-tight text-amber-950 sm:text-5xl lg:text-6xl">
-              Vintage Pressed-Plant Lookup for Scent, Mood, and Layering
+            <h1 className="max-w-[22ch] text-balance text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.02em] text-[#2e2115] sm:text-[2.65rem] lg:text-[3.15rem]">
+              An atlas for scent, mood, and layering
             </h1>
-            <p className="max-w-3xl text-base leading-relaxed text-amber-950/82 sm:text-xl">
-              A field-notebook style explorer inspired by archival botanical plates: filter by scent family,
-              browse regional scent lanes, and build balanced top-heart-base blends.
+            <p className="max-w-2xl text-[1.05rem] leading-[1.65] text-[#3d2d20]/88 sm:text-[1.15rem]">
+              Filter by scent family, follow regional scent lanes, and balance top, heart, and base accords from
+              first lift to dry-down.
             </p>
-            <div className="flex flex-wrap gap-2">
-              <Badge className="bg-amber-950 text-amber-100">Archive-first references</Badge>
-              <Badge variant="secondary" className="bg-amber-900/15 text-amber-900">
-                Blend-ready layering notes
-              </Badge>
-              <Badge variant="secondary" className="bg-[#667a52]/20 text-[#344526]">
+            <div className="flex flex-wrap gap-2.5">
+              <span className="inline-flex items-center rounded-full bg-[#3d2a1c] px-4 py-2 text-[0.8125rem] font-medium text-[#faf6ee] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.25)]">
+                Herbarium plates from the archives
+              </span>
+              <span className="inline-flex items-center rounded-full bg-[#e8dcc4] px-4 py-2 text-[0.8125rem] font-medium text-[#3d2a1c] shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
+                Top–heart–base layering notes
+              </span>
+              <span className="inline-flex items-center rounded-full bg-[#9aab8a]/45 px-4 py-2 text-[0.8125rem] font-medium text-[#2a3820]">
                 Regional scent lanes
-              </Badge>
+              </span>
             </div>
-            <p className="text-xs text-amber-900/75">
-              Visual reference collections:{" "}
+            <p className="text-[0.8125rem] leading-relaxed text-[#6b5340]/85">
+              Open herbarium references:{" "}
               <a
-                className="underline decoration-amber-900/45 underline-offset-2 transition-colors hover:text-amber-950"
+                className="text-[#4a3828] underline decoration-[#8a7358]/45 underline-offset-[3px] transition-colors hover:text-[#2e2115]"
                 href="https://archive.org/details/flora-berolinensis"
                 target="_blank"
                 rel="noreferrer"
@@ -410,7 +464,7 @@ export function HerbariumExplorer() {
               </a>
               {" · "}
               <a
-                className="underline decoration-amber-900/45 underline-offset-2 transition-colors hover:text-amber-950"
+                className="text-[#4a3828] underline decoration-[#8a7358]/45 underline-offset-[3px] transition-colors hover:text-[#2e2115]"
                 href="https://archive.org/details/piante-del-regio-orto-di-padova"
                 target="_blank"
                 rel="noreferrer"
@@ -420,29 +474,37 @@ export function HerbariumExplorer() {
             </p>
           </div>
 
-          <aside className="relative overflow-hidden rounded-2xl border border-amber-950/15 bg-[#f9f2e3]/80 p-4 shadow-[0_18px_32px_-22px_rgba(56,37,15,0.55)] backdrop-blur-[1px]">
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(255,255,255,0.25),transparent_40%,rgba(84,56,24,0.06))]" />
-            <div className="relative space-y-3">
-              <p className="text-[0.68rem] font-medium uppercase tracking-[0.22em] text-amber-900/75">Field Atlas</p>
-              <div className="grid grid-cols-3 gap-2 text-center text-amber-950">
-                <div className="rounded-xl border border-amber-900/15 bg-amber-50/70 px-2 py-2">
-                  <p className="text-lg font-semibold">{ingredients.length}</p>
-                  <p className="text-[0.65rem] uppercase tracking-[0.12em] text-amber-900/70">Plants</p>
+          <aside className="relative overflow-hidden rounded-[1.75rem] border border-[#5c4030]/10 bg-[#faf7f0]/92 p-5 shadow-[0_22px_48px_-28px_rgba(42,28,12,0.5)] backdrop-blur-sm sm:p-6">
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(155deg,rgba(255,255,255,0.5),transparent_45%,rgba(88,62,38,0.04))]" />
+            <div className="relative space-y-4">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[#5c442e]/78">
+                Field Atlas
+              </p>
+              <div className="grid grid-cols-3 gap-2.5 text-center text-[#2e2115]">
+                <div className="rounded-2xl border border-white/80 bg-white/95 px-2 py-2.5 shadow-[0_4px_14px_-6px_rgba(42,28,12,0.28)]">
+                  <p className="text-xl font-semibold tabular-nums tracking-tight">{ingredients.length}</p>
+                  <p className="mt-0.5 text-[0.62rem] font-medium uppercase tracking-[0.14em] text-[#5c442e]/72">
+                    Plants
+                  </p>
                 </div>
-                <div className="rounded-xl border border-amber-900/15 bg-amber-50/70 px-2 py-2">
-                  <p className="text-lg font-semibold">{categories.length}</p>
-                  <p className="text-[0.65rem] uppercase tracking-[0.12em] text-amber-900/70">Families</p>
+                <div className="rounded-2xl border border-white/80 bg-white/95 px-2 py-2.5 shadow-[0_4px_14px_-6px_rgba(42,28,12,0.28)]">
+                  <p className="text-xl font-semibold tabular-nums tracking-tight">{categories.length}</p>
+                  <p className="mt-0.5 text-[0.62rem] font-medium uppercase tracking-[0.14em] text-[#5c442e]/72">
+                    Families
+                  </p>
                 </div>
-                <div className="rounded-xl border border-amber-900/15 bg-amber-50/70 px-2 py-2">
-                  <p className="text-lg font-semibold">{regions.length}</p>
-                  <p className="text-[0.65rem] uppercase tracking-[0.12em] text-amber-900/70">Regions</p>
+                <div className="rounded-2xl border border-white/80 bg-white/95 px-2 py-2.5 shadow-[0_4px_14px_-6px_rgba(42,28,12,0.28)]">
+                  <p className="text-xl font-semibold tabular-nums tracking-tight">{regions.length}</p>
+                  <p className="mt-0.5 text-[0.62rem] font-medium uppercase tracking-[0.14em] text-[#5c442e]/72">
+                    Regions
+                  </p>
                 </div>
               </div>
-              <div className="rounded-xl border border-amber-900/15 bg-[#efe0c0]/55 p-3 text-xs leading-relaxed text-amber-950/80">
-                <p className="font-medium text-amber-950">Notebook cue</p>
-                <p className="mt-1">
-                  Start with one bright top note, one floral or herbal heart, and one resinous base to keep blends
-                  balanced and long-lasting.
+              <div className="rounded-2xl border border-[#c4b49a]/35 bg-[#ebe0c8]/75 p-4 text-[0.8125rem] leading-relaxed text-[#3d2d20]/90">
+                <p className="font-semibold text-[#2e2115]">Blending cue</p>
+                <p className="mt-1.5 text-[#3d2d20]/88">
+                  Try a bright top, a floral or herbal heart, and a resinous anchor—enough contrast to read
+                  clearly, enough weight to carry through the dry-down.
                 </p>
               </div>
             </div>
@@ -517,10 +579,10 @@ export function HerbariumExplorer() {
       <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as ExplorerTab)} className="mt-8 w-full">
         <TabsList className="grid h-auto w-full grid-cols-2 bg-[#efe1c5] sm:grid-cols-3 lg:grid-cols-5">
           <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
-          <TabsTrigger value="tea-therapy">Tea Therapy</TabsTrigger>
+          <TabsTrigger value="tea-therapy">Herbal Teas</TabsTrigger>
           <TabsTrigger value="regions">World Scent Lanes</TabsTrigger>
           <TabsTrigger value="layering">Layering Lab</TabsTrigger>
-          <TabsTrigger value="seasonality">London Seasonality</TabsTrigger>
+          <TabsTrigger value="seasonality">London Flora</TabsTrigger>
         </TabsList>
 
         <TabsContent value="ingredients" className="mt-6">
@@ -553,6 +615,7 @@ export function HerbariumExplorer() {
                       alt={`${item.name} archival herbarium scan`}
                       fill
                       quality={92}
+                      unoptimized={isUnoptimizedImageSrc(imageSrc)}
                       className="object-cover sepia-[0.56] saturate-[0.82]"
                       style={{ objectPosition: item.imageObjectPosition ?? "center 30%" }}
                       sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
@@ -640,7 +703,7 @@ export function HerbariumExplorer() {
         <TabsContent value="tea-therapy" className="mt-6 space-y-4">
           <Card className="border-amber-900/15 bg-[#f7efdd]">
             <CardHeader className="space-y-2">
-              <CardTitle className="text-2xl text-amber-950">Herbal Tea Therapy Notebook</CardTitle>
+              <CardTitle className="text-2xl text-amber-950">Herbal Teas Notebook</CardTitle>
               <CardDescription className="text-sm leading-relaxed text-amber-900/80">
                 Traditional wellness language only: these notes describe how herbs are traditionally used in tea
                 culture and are not medical treatment guidance.
@@ -719,6 +782,7 @@ export function HerbariumExplorer() {
                         alt={`${item.name} tea herb reference image`}
                         fill
                         quality={90}
+                        unoptimized={isUnoptimizedImageSrc(imageSrc)}
                         className="object-cover sepia-[0.56] saturate-[0.82]"
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                         onError={() => {
@@ -943,26 +1007,50 @@ export function HerbariumExplorer() {
         <TabsContent value="seasonality" className="mt-6 space-y-4">
           <Card className="border-amber-900/15 bg-[linear-gradient(145deg,#f6ecd8_0%,#efe2c5_100%)]">
             <CardHeader className="space-y-2">
-              <CardTitle className="text-2xl text-amber-950">General Guide to London Seasonality</CardTitle>
+              <CardTitle className="text-2xl text-amber-950">London Flora Through the Year</CardTitle>
               <CardDescription className="max-w-4xl text-sm leading-relaxed text-amber-900/80">
-                A guide-grade annual overview of major London tree and blossom markers, linked to normalized pollen
-                burden plus monthly sunshine and sunset averages. This is not a real-time forecast.
+                Learn the city&apos;s outdoor flora through the year: when familiar trees, blossoms, and grasses show
+                their main seasonal faces, alongside monthly sunshine, sunset, and mean temperature averages. This is
+                not a real-time field forecast.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-[0.7rem] uppercase tracking-[0.2em] text-amber-900/70">Monthly combined pollen risk</p>
+                <p className="text-[0.7rem] uppercase tracking-[0.2em] text-amber-900/70">Monthly seasonal activity index</p>
+                <p className="mt-1 text-xs text-amber-900/65">
+                  Composite rhythm of the outdoor year (0–100) for context with phenology—not a health or air-quality
+                  score.
+                </p>
                 <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6 lg:grid-cols-12">
                   {monthlyClimate.map((point) => (
                     <div
                       key={`risk-${point.month}`}
                       className={cn(
                         "rounded-md border border-amber-900/20 px-2 py-2 text-center text-xs shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]",
-                        getPollenRiskClass(point.pollenRiskScore),
+                        getSeasonalActivityClass(point.seasonalActivityIndex),
                       )}
                     >
                       <p className="text-[0.65rem] uppercase tracking-[0.15em]">{point.month}</p>
-                      <p className="mt-1 font-semibold">{point.pollenRiskScore}</p>
+                      <p className="mt-1 font-semibold">{point.seasonalActivityIndex}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-[0.7rem] uppercase tracking-[0.2em] text-amber-900/70">Monthly mean air temperature</p>
+                <p className="mt-1 text-xs text-amber-900/65">Long-term average (°C) for reading the thermal year beside phenology.</p>
+                <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6 lg:grid-cols-12">
+                  {monthlyClimate.map((point) => (
+                    <div
+                      key={`temp-${point.month}`}
+                      className={cn(
+                        "rounded-md border px-2 py-2 text-center text-xs shadow-[inset_0_1px_0_rgba(255,255,255,0.25)]",
+                        getAvgTempCellClass(point.avgTempC),
+                      )}
+                    >
+                      <p className="text-[0.65rem] uppercase tracking-[0.15em] text-amber-950/80">{point.month}</p>
+                      <p className="mt-1 font-semibold tabular-nums text-amber-950">{formatAvgTempC(point.avgTempC)}</p>
                     </div>
                   ))}
                 </div>
@@ -987,15 +1075,17 @@ export function HerbariumExplorer() {
 
           <Card className="border-amber-900/15 bg-[#fbf6ea]">
             <CardHeader>
-              <CardTitle className="text-amber-950">Tree and Blossom Timeline</CardTitle>
+              <CardTitle className="text-amber-950">Tree, Blossom, and Grass Timeline</CardTitle>
               <CardDescription className="text-amber-900/75">
-                Active and peak windows for London markers, with each marker&apos;s typical pollen contribution.
+                When to look for each plant group in the city (active vs peak months). Salience scores describe how
+                strongly each marker tends to stand out in the seasonal calendar—handy for learning what to notice first.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="overflow-x-auto">
-                <div className="min-w-[820px] space-y-2">
-                  <div className="grid grid-cols-[16rem_repeat(12,minmax(0,1fr))] gap-2 text-[0.65rem] uppercase tracking-[0.16em] text-amber-900/65">
+                <div className="min-w-[900px] space-y-2">
+                  <div className="grid grid-cols-[4.5rem_15rem_repeat(12,minmax(0,1fr))] gap-2 text-[0.65rem] uppercase tracking-[0.16em] text-amber-900/65">
+                    <p className="text-center">Plate</p>
                     <p className="px-2">Marker</p>
                     {monthLabels.map((month) => (
                       <p key={`month-label-${month}`} className="text-center">
@@ -1007,22 +1097,36 @@ export function HerbariumExplorer() {
                   {seasonalMarkers.map((marker) => (
                     <div
                       key={marker.id}
-                      className="grid grid-cols-[16rem_repeat(12,minmax(0,1fr))] gap-2 rounded-lg border border-amber-900/15 bg-amber-50/60 p-2"
+                      className="grid grid-cols-[4.5rem_15rem_repeat(12,minmax(0,1fr))] gap-2 rounded-lg border border-amber-900/15 bg-amber-50/60 p-2"
                     >
+                      <div className="relative h-20 w-full overflow-hidden rounded-md border border-amber-900/20 bg-[#efe6d4] shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
+                        <Image
+                          src={marker.referenceImage.url}
+                          alt={`${marker.name} botanical reference plate`}
+                          fill
+                          unoptimized={isUnoptimizedImageSrc(marker.referenceImage.url)}
+                          className="object-cover sepia-[0.35] saturate-[0.92]"
+                          sizes="72px"
+                        />
+                      </div>
                       <div className="space-y-1">
                         <p className="text-sm font-semibold text-amber-950">{marker.name}</p>
                         <div className="flex flex-wrap gap-1">
                           <Badge
                             variant="outline"
-                            className={cn("border-amber-900/25 bg-transparent text-[0.65rem] uppercase", marker.type === "tree" ? "text-[#466a4b]" : "text-[#8a5730]")}
+                            className={cn(
+                              "border-amber-900/25 bg-transparent text-[0.65rem] uppercase",
+                              getSeasonalMarkerTypeBadgeClass(marker.type),
+                            )}
                           >
                             {marker.type}
                           </Badge>
-                          <Badge className={cn("text-[0.65rem]", getContributionClass(marker.pollenContribution.score))}>
-                            {marker.pollenContribution.score} · {marker.pollenContribution.label}
+                          <Badge className={cn("text-[0.65rem]", getContributionClass(marker.floraSalience.score))}>
+                            {marker.floraSalience.score} · {getFloraSalienceLabel(marker.floraSalience.score)}
                           </Badge>
                         </div>
                         <p className="text-xs leading-relaxed text-amber-900/75">{marker.notes}</p>
+                        <p className="text-[0.62rem] leading-snug text-amber-900/55">{marker.referenceImage.credit}</p>
                       </div>
 
                       {monthLabels.map((month) => {
@@ -1053,9 +1157,10 @@ export function HerbariumExplorer() {
 
           <Card className="border-amber-900/15 bg-[#f7f0df]">
             <CardHeader>
-              <CardTitle className="text-amber-950">Monthly Sunshine and Sunset Averages</CardTitle>
+              <CardTitle className="text-amber-950">Monthly Sunshine, Sunset, and Temperature</CardTitle>
               <CardDescription className="text-amber-900/75">
-                Dual-axis graph: sunshine hours on the left axis and average sunset time on the right axis.
+                Three overlaid series (each with its own vertical scale): sunshine hours (left), mean air temperature
+                (far left), and average sunset time (right).
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -1064,9 +1169,14 @@ export function HerbariumExplorer() {
                   viewBox={`0 0 ${climateChart.width} ${climateChart.height}`}
                   className="min-w-[760px]"
                   role="img"
-                  aria-label="London monthly sunshine and sunset averages chart with dual axes"
+                  aria-label="London monthly sunshine, mean temperature, and sunset averages chart with three vertical scales"
                 >
-                  <title>London monthly sunshine and sunset averages</title>
+                  <title>London monthly sunshine, temperature, and sunset averages</title>
+                  {climateChart.tempTicks.map((tick) => (
+                    <text key={`temp-tick-${tick.value}`} x={10} y={tick.y + 4} textAnchor="start" fontSize="10" fill="#2a5d6e">
+                      {tick.value}°
+                    </text>
+                  ))}
                   {climateChart.sunshineTicks.map((tick) => (
                     <g key={`grid-${tick.value}`}>
                       <line
@@ -1141,12 +1251,23 @@ export function HerbariumExplorer() {
                     strokeWidth="3"
                     strokeLinejoin="round"
                   />
+                  <polyline
+                    points={buildPolyline(climateChart.tempPoints)}
+                    fill="none"
+                    stroke={chartColors.temp}
+                    strokeWidth="2.5"
+                    strokeLinejoin="round"
+                    strokeDasharray="6 4"
+                  />
 
                   {climateChart.sunshinePoints.map((point) => (
                     <circle key={`sunshine-dot-${point.month}`} cx={point.x} cy={point.y} r="3.2" fill={chartColors.sunshine} />
                   ))}
                   {climateChart.sunsetPoints.map((point) => (
                     <circle key={`sunset-dot-${point.month}`} cx={point.x} cy={point.y} r="3.2" fill={chartColors.sunset} />
+                  ))}
+                  {climateChart.tempPoints.map((point) => (
+                    <circle key={`temp-dot-${point.month}`} cx={point.x} cy={point.y} r="2.8" fill={chartColors.temp} />
                   ))}
 
                   {climateChart.sunshinePoints.map((point) => (
@@ -1170,6 +1291,10 @@ export function HerbariumExplorer() {
                   Sunshine hours (avg)
                 </p>
                 <p className="inline-flex items-center gap-1 rounded-md border border-amber-900/20 bg-amber-50/70 px-2 py-1 text-amber-950">
+                  <span className="inline-block size-2 rounded-full" style={{ backgroundColor: chartColors.temp }} />
+                  Mean air temp (°C)
+                </p>
+                <p className="inline-flex items-center gap-1 rounded-md border border-amber-900/20 bg-amber-50/70 px-2 py-1 text-amber-950">
                   <span className="inline-block size-2 rounded-full" style={{ backgroundColor: chartColors.sunset }} />
                   Sunset time (avg)
                 </p>
@@ -1180,8 +1305,8 @@ export function HerbariumExplorer() {
                 <ul className="mt-1 space-y-1">
                   {monthlyClimate.map((point) => (
                     <li key={`fallback-${point.month}`}>
-                      {point.month}: {point.sunshineHoursAvg} sunshine hours, sunset {formatSunsetMinutes(point.sunsetAvgMinutes)}, pollen risk{" "}
-                      {point.pollenRiskScore}/100.
+                      {point.month}: {formatAvgTempC(point.avgTempC)} mean, {point.sunshineHoursAvg} sunshine hours, sunset{" "}
+                      {formatSunsetMinutes(point.sunsetAvgMinutes)}, seasonal activity index {point.seasonalActivityIndex}/100.
                     </li>
                   ))}
                 </ul>
@@ -1227,6 +1352,7 @@ export function HerbariumExplorer() {
                       alt={`${selectedTea.name} tea herb reference image`}
                       fill
                       quality={92}
+                      unoptimized={isUnoptimizedImageSrc(imageSrc)}
                       className="object-cover sepia-[0.58] saturate-[0.8]"
                       sizes="(max-width: 768px) 100vw, 800px"
                       onError={() => {
@@ -1377,6 +1503,7 @@ export function HerbariumExplorer() {
                 alt={`${selectedIngredient.name} archival herbarium scan`}
                 fill
                 quality={92}
+                unoptimized={isUnoptimizedImageSrc(imageSrc)}
                 className="object-contain p-2 sepia-[0.58] saturate-[0.8] lg:p-4"
                 style={{ objectPosition: selectedIngredient.imageObjectPosition ?? "center 30%" }}
                 sizes="(max-width: 768px) 100vw, 800px"

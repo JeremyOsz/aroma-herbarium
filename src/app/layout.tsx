@@ -5,7 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Aromatherapy Herbarium",
   description:
-    "Vintage-inspired aromatherapy lookup with Archive.org herbarium scans, world scent lanes, and blend layering guides.",
+    "Scent, mood, and layering—browse families, regional scent lanes, and top–heart–base blending notes.",
   themeColor: "#E8E2D4",
   icons: {
     icon: [
