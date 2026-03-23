@@ -21,11 +21,19 @@ import {
   type Ingredient,
   usageGuide,
 } from "@/data/aromatherapy";
+import {
+  formatSunsetMinutes,
+  monthLabels,
+  monthlyClimate,
+  seasonalMarkers,
+  sourceNotes,
+  validateLondonSeasonalityData,
+} from "@/data/london-seasonality";
 import { cn } from "@/lib/utils";
 
 const categories = Object.keys(categoryLabels) as AromaCategory[];
 const regions = Object.keys(regionNotes) as AromaRegion[];
-const tabs = ["ingredients", "regions", "layering"] as const;
+const tabs = ["ingredients", "regions", "layering", "seasonality"] as const;
 type ExplorerTab = (typeof tabs)[number];
 const amazonAffiliateTag = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_TAG?.trim();
 const laneCardAccents = [
@@ -36,6 +44,28 @@ const laneCardAccents = [
   "from-[#f6f0dd] via-[#ebdfb8] to-[#dccb96]",
   "from-[#efe3d4] via-[#dfcdb4] to-[#ccb090]",
 ];
+const chartColors = {
+  sunshine: "#c58a2f",
+  sunset: "#466a4b",
+};
+
+function buildPolyline(points: { x: number; y: number }[]) {
+  return points.map((point) => `${point.x},${point.y}`).join(" ");
+}
+
+function getPollenRiskClass(score: number) {
+  if (score >= 75) return "bg-[#8c2f39] text-amber-50";
+  if (score >= 55) return "bg-[#b55d2e] text-amber-50";
+  if (score >= 30) return "bg-[#d2a34f] text-amber-950";
+  return "bg-[#dfe7d5] text-[#32462e]";
+}
+
+function getContributionClass(score: number) {
+  if (score >= 75) return "bg-[#8c2f39]/95 text-amber-50";
+  if (score >= 55) return "bg-[#b55d2e]/90 text-amber-50";
+  if (score >= 30) return "bg-[#e3bc68] text-amber-950";
+  return "bg-[#d9e4cd] text-[#32462e]";
+}
 
 function isExplorerTab(value: string | null): value is ExplorerTab {
   return value !== null && (tabs as readonly string[]).includes(value);
@@ -231,6 +261,66 @@ export function HerbariumExplorer() {
     }, {});
   }, []);
 
+  const seasonalityValidationErrors = useMemo(() => validateLondonSeasonalityData(), []);
+
+  const climateChart = useMemo(() => {
+    const width = 920;
+    const height = 330;
+    const padding = { top: 22, right: 54, bottom: 44, left: 56 };
+    const plotWidth = width - padding.left - padding.right;
+    const plotHeight = height - padding.top - padding.bottom;
+    const pointCount = monthlyClimate.length;
+
+    const sunshineValues = monthlyClimate.map((point) => point.sunshineHoursAvg);
+    const sunsetValues = monthlyClimate.map((point) => point.sunsetAvgMinutes);
+    const sunshineMin = Math.min(...sunshineValues);
+    const sunshineMax = Math.max(...sunshineValues);
+    const sunsetMin = Math.min(...sunsetValues);
+    const sunsetMax = Math.max(...sunsetValues);
+
+    const xForIndex = (index: number) => padding.left + (index / (pointCount - 1)) * plotWidth;
+    const yForSunshine = (value: number) =>
+      padding.top + ((sunshineMax - value) / Math.max(1, sunshineMax - sunshineMin)) * plotHeight;
+    const yForSunset = (value: number) =>
+      padding.top + ((sunsetMax - value) / Math.max(1, sunsetMax - sunsetMin)) * plotHeight;
+
+    const sunshinePoints = monthlyClimate.map((point, index) => ({
+      month: point.month,
+      x: xForIndex(index),
+      y: yForSunshine(point.sunshineHoursAvg),
+      value: point.sunshineHoursAvg,
+    }));
+
+    const sunsetPoints = monthlyClimate.map((point, index) => ({
+      month: point.month,
+      x: xForIndex(index),
+      y: yForSunset(point.sunsetAvgMinutes),
+      value: point.sunsetAvgMinutes,
+    }));
+
+    const tickCount = 5;
+    const sunshineTicks = Array.from({ length: tickCount }, (_, index) => {
+      const ratio = index / (tickCount - 1);
+      const value = Math.round(sunshineMax - ratio * (sunshineMax - sunshineMin));
+      return { value, y: yForSunshine(value) };
+    });
+    const sunsetTicks = Array.from({ length: tickCount }, (_, index) => {
+      const ratio = index / (tickCount - 1);
+      const value = Math.round(sunsetMax - ratio * (sunsetMax - sunsetMin));
+      return { value, y: yForSunset(value) };
+    });
+
+    return {
+      width,
+      height,
+      padding,
+      sunshinePoints,
+      sunsetPoints,
+      sunshineTicks,
+      sunsetTicks,
+    };
+  }, []);
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <header className="relative isolate overflow-hidden rounded-[2rem] border border-amber-900/20 bg-[radial-gradient(circle_at_5%_4%,rgba(164,112,61,0.28),transparent_35%),radial-gradient(circle_at_84%_16%,rgba(77,109,74,0.3),transparent_38%),linear-gradient(160deg,#f8f1e0_0%,#efe1c6_50%,#e4d0ae_100%)] p-7 shadow-[0_24px_55px_-30px_rgba(47,29,8,0.6)] sm:p-10">
@@ -375,10 +465,11 @@ export function HerbariumExplorer() {
       </section>
 
       <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as ExplorerTab)} className="mt-8 w-full">
-        <TabsList className="grid h-auto w-full grid-cols-3 bg-[#efe1c5]">
+        <TabsList className="grid h-auto w-full grid-cols-2 bg-[#efe1c5] sm:grid-cols-4">
           <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
           <TabsTrigger value="regions">World Scent Lanes</TabsTrigger>
           <TabsTrigger value="layering">Layering Lab</TabsTrigger>
+          <TabsTrigger value="seasonality">London Seasonality</TabsTrigger>
         </TabsList>
 
         <TabsContent value="ingredients" className="mt-6">
@@ -649,6 +740,269 @@ export function HerbariumExplorer() {
               <ul className="space-y-2 text-sm text-amber-950/85">
                 {usageGuide.safety.map((rule) => (
                   <li key={rule}>• {rule}</li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="seasonality" className="mt-6 space-y-4">
+          <Card className="border-amber-900/15 bg-[linear-gradient(145deg,#f6ecd8_0%,#efe2c5_100%)]">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-2xl text-amber-950">General Guide to London Seasonality</CardTitle>
+              <CardDescription className="max-w-4xl text-sm leading-relaxed text-amber-900/80">
+                A guide-grade annual overview of major London tree and blossom markers, linked to normalized pollen
+                burden plus monthly sunshine and sunset averages. This is not a real-time forecast.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-[0.7rem] uppercase tracking-[0.2em] text-amber-900/70">Monthly combined pollen risk</p>
+                <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6 lg:grid-cols-12">
+                  {monthlyClimate.map((point) => (
+                    <div
+                      key={`risk-${point.month}`}
+                      className={cn(
+                        "rounded-md border border-amber-900/20 px-2 py-2 text-center text-xs shadow-[inset_0_1px_0_rgba(255,255,255,0.3)]",
+                        getPollenRiskClass(point.pollenRiskScore),
+                      )}
+                    >
+                      <p className="text-[0.65rem] uppercase tracking-[0.15em]">{point.month}</p>
+                      <p className="mt-1 font-semibold">{point.pollenRiskScore}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {seasonalityValidationErrors.length ? (
+            <Card className="border-red-300 bg-red-50/70">
+              <CardHeader>
+                <CardTitle className="text-base text-red-900">Seasonality data check failed</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-1 text-sm text-red-900/85">
+                  {seasonalityValidationErrors.map((error) => (
+                    <li key={error}>• {error}</li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          ) : null}
+
+          <Card className="border-amber-900/15 bg-[#fbf6ea]">
+            <CardHeader>
+              <CardTitle className="text-amber-950">Tree and Blossom Timeline</CardTitle>
+              <CardDescription className="text-amber-900/75">
+                Active and peak windows for London markers, with each marker&apos;s typical pollen contribution.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="overflow-x-auto">
+                <div className="min-w-[820px] space-y-2">
+                  <div className="grid grid-cols-[16rem_repeat(12,minmax(0,1fr))] gap-2 text-[0.65rem] uppercase tracking-[0.16em] text-amber-900/65">
+                    <p className="px-2">Marker</p>
+                    {monthLabels.map((month) => (
+                      <p key={`month-label-${month}`} className="text-center">
+                        {month}
+                      </p>
+                    ))}
+                  </div>
+
+                  {seasonalMarkers.map((marker) => (
+                    <div
+                      key={marker.id}
+                      className="grid grid-cols-[16rem_repeat(12,minmax(0,1fr))] gap-2 rounded-lg border border-amber-900/15 bg-amber-50/60 p-2"
+                    >
+                      <div className="space-y-1">
+                        <p className="text-sm font-semibold text-amber-950">{marker.name}</p>
+                        <div className="flex flex-wrap gap-1">
+                          <Badge
+                            variant="outline"
+                            className={cn("border-amber-900/25 bg-transparent text-[0.65rem] uppercase", marker.type === "tree" ? "text-[#466a4b]" : "text-[#8a5730]")}
+                          >
+                            {marker.type}
+                          </Badge>
+                          <Badge className={cn("text-[0.65rem]", getContributionClass(marker.pollenContribution.score))}>
+                            {marker.pollenContribution.score} · {marker.pollenContribution.label}
+                          </Badge>
+                        </div>
+                        <p className="text-xs leading-relaxed text-amber-900/75">{marker.notes}</p>
+                      </div>
+
+                      {monthLabels.map((month) => {
+                        const isPeak = marker.peakMonths.includes(month);
+                        const isActive = marker.activeMonths.includes(month);
+                        return (
+                          <div
+                            key={`${marker.id}-${month}`}
+                            className={cn(
+                              "rounded-md border border-amber-900/15 text-center text-[0.63rem] font-medium leading-6",
+                              isPeak
+                                ? "bg-[#b77735] text-amber-50"
+                                : isActive
+                                  ? "bg-[#ead6b0] text-amber-950"
+                                  : "bg-amber-50/40 text-amber-900/35",
+                            )}
+                          >
+                            {isPeak ? "Peak" : isActive ? "On" : "·"}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-amber-900/15 bg-[#f7f0df]">
+            <CardHeader>
+              <CardTitle className="text-amber-950">Monthly Sunshine and Sunset Averages</CardTitle>
+              <CardDescription className="text-amber-900/75">
+                Dual-axis graph: sunshine hours on the left axis and average sunset time on the right axis.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="overflow-x-auto rounded-xl border border-amber-900/15 bg-amber-50/60 p-3">
+                <svg
+                  viewBox={`0 0 ${climateChart.width} ${climateChart.height}`}
+                  className="min-w-[760px]"
+                  role="img"
+                  aria-label="London monthly sunshine and sunset averages chart with dual axes"
+                >
+                  <title>London monthly sunshine and sunset averages</title>
+                  {climateChart.sunshineTicks.map((tick) => (
+                    <g key={`grid-${tick.value}`}>
+                      <line
+                        x1={climateChart.padding.left}
+                        x2={climateChart.width - climateChart.padding.right}
+                        y1={tick.y}
+                        y2={tick.y}
+                        stroke="#b88f5e"
+                        strokeOpacity={0.32}
+                        strokeDasharray="4 5"
+                      />
+                      <text
+                        x={climateChart.padding.left - 8}
+                        y={tick.y + 4}
+                        textAnchor="end"
+                        fontSize="11"
+                        fill="#6f4a28"
+                      >
+                        {tick.value}h
+                      </text>
+                    </g>
+                  ))}
+
+                  {climateChart.sunsetTicks.map((tick) => (
+                    <text
+                      key={`sunset-tick-${tick.value}`}
+                      x={climateChart.width - climateChart.padding.right + 8}
+                      y={tick.y + 4}
+                      fontSize="11"
+                      fill="#3f583e"
+                    >
+                      {formatSunsetMinutes(tick.value)}
+                    </text>
+                  ))}
+
+                  <line
+                    x1={climateChart.padding.left}
+                    x2={climateChart.padding.left}
+                    y1={climateChart.padding.top}
+                    y2={climateChart.height - climateChart.padding.bottom}
+                    stroke="#8f6843"
+                    strokeOpacity={0.7}
+                  />
+                  <line
+                    x1={climateChart.width - climateChart.padding.right}
+                    x2={climateChart.width - climateChart.padding.right}
+                    y1={climateChart.padding.top}
+                    y2={climateChart.height - climateChart.padding.bottom}
+                    stroke="#5f795a"
+                    strokeOpacity={0.7}
+                  />
+                  <line
+                    x1={climateChart.padding.left}
+                    x2={climateChart.width - climateChart.padding.right}
+                    y1={climateChart.height - climateChart.padding.bottom}
+                    y2={climateChart.height - climateChart.padding.bottom}
+                    stroke="#8f6843"
+                    strokeOpacity={0.7}
+                  />
+
+                  <polyline
+                    points={buildPolyline(climateChart.sunshinePoints)}
+                    fill="none"
+                    stroke={chartColors.sunshine}
+                    strokeWidth="3"
+                    strokeLinejoin="round"
+                  />
+                  <polyline
+                    points={buildPolyline(climateChart.sunsetPoints)}
+                    fill="none"
+                    stroke={chartColors.sunset}
+                    strokeWidth="3"
+                    strokeLinejoin="round"
+                  />
+
+                  {climateChart.sunshinePoints.map((point) => (
+                    <circle key={`sunshine-dot-${point.month}`} cx={point.x} cy={point.y} r="3.2" fill={chartColors.sunshine} />
+                  ))}
+                  {climateChart.sunsetPoints.map((point) => (
+                    <circle key={`sunset-dot-${point.month}`} cx={point.x} cy={point.y} r="3.2" fill={chartColors.sunset} />
+                  ))}
+
+                  {climateChart.sunshinePoints.map((point) => (
+                    <text
+                      key={`month-${point.month}`}
+                      x={point.x}
+                      y={climateChart.height - climateChart.padding.bottom + 16}
+                      textAnchor="middle"
+                      fontSize="11"
+                      fill="#6f4a28"
+                    >
+                      {point.month}
+                    </text>
+                  ))}
+                </svg>
+              </div>
+
+              <div className="flex flex-wrap gap-3 text-xs">
+                <p className="inline-flex items-center gap-1 rounded-md border border-amber-900/20 bg-amber-50/70 px-2 py-1 text-amber-950">
+                  <span className="inline-block size-2 rounded-full" style={{ backgroundColor: chartColors.sunshine }} />
+                  Sunshine hours (avg)
+                </p>
+                <p className="inline-flex items-center gap-1 rounded-md border border-amber-900/20 bg-amber-50/70 px-2 py-1 text-amber-950">
+                  <span className="inline-block size-2 rounded-full" style={{ backgroundColor: chartColors.sunset }} />
+                  Sunset time (avg)
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-amber-900/15 bg-amber-50/70 p-3 text-xs leading-relaxed text-amber-900/85">
+                <p className="font-semibold text-amber-950">Text fallback</p>
+                <ul className="mt-1 space-y-1">
+                  {monthlyClimate.map((point) => (
+                    <li key={`fallback-${point.month}`}>
+                      {point.month}: {point.sunshineHoursAvg} sunshine hours, sunset {formatSunsetMinutes(point.sunsetAvgMinutes)}, pollen risk{" "}
+                      {point.pollenRiskScore}/100.
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-amber-900/15 bg-[#fbf6ea]">
+            <CardHeader>
+              <CardTitle className="text-amber-950">Sources and Baseline Notes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-amber-950/85">
+                {sourceNotes.map((note) => (
+                  <li key={note}>• {note}</li>
                 ))}
               </ul>
             </CardContent>
