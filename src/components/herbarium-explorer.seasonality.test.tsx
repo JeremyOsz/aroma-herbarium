@@ -1,6 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(() => {
+  cleanup();
+});
 
 import { HerbariumExplorer } from "@/components/herbarium-explorer";
 
@@ -22,6 +26,18 @@ describe("HerbariumExplorer seasonality tab", () => {
     render(<HerbariumExplorer />);
 
     expect(screen.getByRole("tab", { name: "London Flora" })).toBeInTheDocument();
+  });
+
+  it("shows ingredient search on the default Ingredients tab", () => {
+    searchParamsValue = "";
+    render(<HerbariumExplorer />);
+    expect(screen.getByPlaceholderText("Search ingredient, accord, or symbolism")).toBeInTheDocument();
+  });
+
+  it("hides ingredient search when another tab is active", () => {
+    searchParamsValue = "tab=seasonality";
+    render(<HerbariumExplorer />);
+    expect(screen.queryByPlaceholderText("Search ingredient, accord, or symbolism")).not.toBeInTheDocument();
   });
 
   it("renders seasonality content from URL tab param", () => {

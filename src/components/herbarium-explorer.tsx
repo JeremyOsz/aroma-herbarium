@@ -512,58 +512,6 @@ export function HerbariumExplorer() {
         </div>
       </header>
 
-      <section className="mt-8 grid gap-4 rounded-2xl border border-amber-900/15 bg-[#f7f0df]/90 p-4 shadow-[0_12px_35px_-25px_rgba(58,38,12,0.45)] sm:grid-cols-2 lg:grid-cols-3">
-        <div className="relative lg:col-span-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-amber-900/45" />
-          <Input
-            value={query}
-            onChange={(event) => handleQueryChange(event.target.value)}
-            placeholder="Search ingredient, accord, or symbolism"
-            className="border-amber-900/20 bg-amber-50/60 pl-9 text-amber-950 placeholder:text-amber-900/45"
-          />
-        </div>
-
-        <div className="flex flex-wrap gap-2 lg:col-span-2">
-          <Button
-            variant={activeCategory === "all" ? "default" : "outline"}
-            className="rounded-full"
-            onClick={() => handleCategoryChange("all")}
-          >
-            All Categories
-          </Button>
-          {categories.map((category) => (
-            <Button
-              key={category}
-              variant={activeCategory === category ? "default" : "outline"}
-              className="rounded-full"
-              onClick={() => handleCategoryChange(category)}
-            >
-              {categoryLabels[category]}
-            </Button>
-          ))}
-        </div>
-
-        <div className="flex flex-wrap gap-2 lg:col-span-3">
-          <Button
-            variant={activeRegion === "all" ? "secondary" : "outline"}
-            className="rounded-full"
-            onClick={() => handleRegionChange("all")}
-          >
-            All Regions
-          </Button>
-          {regions.map((region) => (
-            <Button
-              key={region}
-              variant={activeRegion === region ? "secondary" : "outline"}
-              className="rounded-full"
-              onClick={() => handleRegionChange(region)}
-            >
-              {region}
-            </Button>
-          ))}
-        </div>
-      </section>
-
       <section className="mt-4 rounded-xl border border-amber-900/20 bg-amber-50/70 p-3 text-xs text-amber-950/80">
         <p>
           Affiliate disclosure: Some links are Amazon affiliate links. As an Amazon Associate, you can earn from
@@ -577,15 +525,85 @@ export function HerbariumExplorer() {
       </section>
 
       <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as ExplorerTab)} className="mt-8 w-full">
-        <TabsList className="grid h-auto w-full grid-cols-2 bg-[#efe1c5] sm:grid-cols-3 lg:grid-cols-5">
-          <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
-          <TabsTrigger value="tea-therapy">Herbal Teas</TabsTrigger>
-          <TabsTrigger value="regions">World Scent Lanes</TabsTrigger>
-          <TabsTrigger value="layering">Layering Lab</TabsTrigger>
-          <TabsTrigger value="seasonality">London Flora</TabsTrigger>
-        </TabsList>
+        <div className="-mx-1 w-[calc(100%+0.5rem)] overflow-x-auto overflow-y-hidden px-1 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:w-full md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden">
+          <TabsList
+            aria-label="Herbarium sections"
+            className="inline-flex h-auto min-h-10 w-max max-w-none flex-nowrap gap-1 bg-[#efe1c5] p-[3px] md:grid md:w-full md:max-w-full md:grid-cols-5"
+          >
+            <TabsTrigger value="ingredients" className="flex-none shrink-0 px-3 md:min-w-0 md:flex-1">
+              Ingredients
+            </TabsTrigger>
+            <TabsTrigger value="tea-therapy" className="flex-none shrink-0 px-3 md:min-w-0 md:flex-1">
+              Herbal Teas
+            </TabsTrigger>
+            <TabsTrigger value="regions" className="flex-none shrink-0 px-3 md:min-w-0 md:flex-1">
+              World Scent Lanes
+            </TabsTrigger>
+            <TabsTrigger value="layering" className="flex-none shrink-0 px-3 md:min-w-0 md:flex-1">
+              Layering Lab
+            </TabsTrigger>
+            <TabsTrigger value="seasonality" className="flex-none shrink-0 px-3 md:min-w-0 md:flex-1">
+              London Flora
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
-        <TabsContent value="ingredients" className="mt-6">
+        <TabsContent value="ingredients" className="mt-6 space-y-6">
+          <section
+            className="grid gap-4 rounded-2xl border border-amber-900/15 bg-[#f7f0df]/90 p-4 shadow-[0_12px_35px_-25px_rgba(58,38,12,0.45)] sm:grid-cols-2 lg:grid-cols-3"
+            aria-label="Filter ingredients"
+          >
+            <div className="relative lg:col-span-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-amber-900/45" />
+              <Input
+                value={query}
+                onChange={(event) => handleQueryChange(event.target.value)}
+                placeholder="Search ingredient, accord, or symbolism"
+                className="border-amber-900/20 bg-amber-50/60 pl-9 text-amber-950 placeholder:text-amber-900/45"
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-2 lg:col-span-2">
+              <Button
+                variant={activeCategory === "all" ? "default" : "outline"}
+                className="rounded-full"
+                onClick={() => handleCategoryChange("all")}
+              >
+                All Categories
+              </Button>
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={activeCategory === category ? "default" : "outline"}
+                  className="rounded-full"
+                  onClick={() => handleCategoryChange(category)}
+                >
+                  {categoryLabels[category]}
+                </Button>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-2 lg:col-span-3">
+              <Button
+                variant={activeRegion === "all" ? "secondary" : "outline"}
+                className="rounded-full"
+                onClick={() => handleRegionChange("all")}
+              >
+                All Regions
+              </Button>
+              {regions.map((region) => (
+                <Button
+                  key={region}
+                  variant={activeRegion === region ? "secondary" : "outline"}
+                  className="rounded-full"
+                  onClick={() => handleRegionChange(region)}
+                >
+                  {region}
+                </Button>
+              ))}
+            </div>
+          </section>
+
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {filtered.map((item) => {
               const fallbackStage = imageFallbackStage[item.id] ?? 0;
