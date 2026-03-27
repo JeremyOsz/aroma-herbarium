@@ -512,18 +512,6 @@ export function HerbariumExplorer() {
         </div>
       </header>
 
-      <section className="mt-4 rounded-xl border border-amber-900/20 bg-amber-50/70 p-3 text-xs text-amber-950/80">
-        <p>
-          Affiliate disclosure: Some links are Amazon affiliate links. As an Amazon Associate, you can earn from
-          qualifying purchases.
-        </p>
-        {!amazonAffiliateTag ? (
-          <p className="mt-1 text-amber-900/80">
-            Monetization is currently inactive. Set <code>NEXT_PUBLIC_AMAZON_AFFILIATE_TAG</code> to enable your tag.
-          </p>
-        ) : null}
-      </section>
-
       <Tabs value={activeTab} onValueChange={(value) => handleTabChange(value as ExplorerTab)} className="mt-8 w-full">
         <div className="-mx-1 w-[calc(100%+0.5rem)] overflow-x-auto overflow-y-hidden px-1 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:w-full md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden">
           <TabsList
